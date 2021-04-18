@@ -1,0 +1,78 @@
+[
+	{
+	"caption": "Justify Columns",
+	"command": "datawiziardjustifycolumns"
+	},
+	{
+	"caption": "Collapse Columns",
+	"command": "datawizardcollapsecolumns"
+	},
+	{
+	"caption": "Data Pivot",
+	"command": "datawizardpivot"
+	},
+	{
+	"caption": "Data Pop",
+	"command": "datawizardpop"
+	},
+	{
+	"caption": "Get Distinct Chars",
+	"command": "datawizarddistinctchars"
+	},
+	{
+	"caption": "Convert Py Var to Text",
+	"command": "datawizardpyvartotext"
+	},
+	{
+	"caption": "Keep Delimiters",
+	"command": "datawizardkeepdelimiters"
+	},
+	{
+	"caption": "Add Leading Zeros",
+	"command": "datawizardleadingzerosadd"
+	},
+	{
+	"caption": "Remove Leading Zeros",
+	"command": "datawizardleadingzerosremove"
+	},
+	{
+	"caption": "Lower Case Sql",
+	"command": "datawizardsqltolowercaser"
+	},
+	{
+	"caption": "First Name",
+	"command": "datawizardrandomfirstname"
+	},
+	{
+	"caption": " Address",
+	"command": "datawizardrandomaddress"
+	},
+	{
+	"caption": " State Abbv",
+	"command": "datawizardrandomstateabbv"
+	},
+	{
+	"caption": " LastName",
+	"command": "datawizardrandomlastname"
+	},
+	{
+	"caption": "City",
+	"command": "datawizardrandomcity"
+	},
+	{
+	"caption": "Phone Number",
+	"command": "datawizardrandomphonenumber"
+	},
+	{
+	"caption": "Suffle Char Vertical",
+	"command": "datawizardrandomshufflecharvertically"
+	},
+	{
+	"caption": "Suffle Column Vertical",
+	"command": "datawizardrandomshufflecolumnvertically"
+	},
+	{
+	"caption": "Sample",
+	"command": "datawizardstatisticssample"
+	}
+]

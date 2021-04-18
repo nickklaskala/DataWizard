@@ -1,0 +1,122 @@
+[
+	{ 
+		"caption": "Data Wizard", 
+		"id": "Data Wizard", 
+		"children":
+		[
+
+			{ 
+				"caption": "Data Tools", 
+				"id": "Data Manipulation Tools", 
+				"children":
+				[
+					{
+					"caption": "Columns Justify",
+					"command": "datawiziardjustifycolumns"
+					},
+					{
+					"caption": "Columns Collapse",
+					"command": "datawizardcollapsecolumns"
+					},
+					{
+					"caption": "Data Pivot",
+					"command": "datawizardpivot"
+					},
+					{
+					"caption": "Data Pivot and Justify (file size sensitive)",
+					"command": "datawizardpivot"
+					},
+					{
+					"caption": "Data Pop",
+					"command": "datawizardpop"
+					},
+					{
+					"caption": "Leading Zeros Add",
+					"command": "datawizardleadingzerosadd"
+					},
+					{
+					"caption": "Leading Zeros Remove",
+					"command": "datawizardleadingzerosremove"
+					},
+					{
+					"caption": "Keep Delimiters",
+					"command": "datawizardkeepdelimiters"
+					},
+				]
+			},
+
+			{
+				"caption": "Random", 
+				"id": "Random", 
+				"children":
+				[
+					{
+					"caption": "First Name",
+					"command": "datawizardrandomfirstname"
+					},
+					{
+					"caption": "Address",
+					"command": "datawizardrandomaddress"
+					},
+					{
+					"caption": "State Abbv",
+					"command": "datawizardrandomstateabbv"
+					},
+					{
+					"caption": " LastName",
+					"command": "datawizardrandomlastname"
+					},
+					{
+					"caption": "City",
+					"command": "datawizardrandomcity"
+					},
+					{
+					"caption": "Phone Number",
+					"command": "datawizardrandomphonenumber"
+					},
+					{
+					"caption": "Suffle Char Vertical",
+					"command": "datawizardrandomshufflecharvertically"
+					},
+					{
+					"caption": "Suffle Column Vertical",
+					"command": "datawizardrandomshufflecolumnvertically"
+					},
+				],
+			},
+
+			{
+				"caption": "Analyze", 
+				"id": "Analyze", 
+				"children":
+				[
+					{
+					"caption": "Sample file",
+					"command": "datawizardstatisticssample"
+					},
+					{
+					"caption": "Get Distinct Chars",
+					"command": "datawizarddistinctchars"
+					},
+				],
+			},
+
+			{ 
+				"caption": "Other Tools", 
+				"id": "Data Manipulation Tools", 
+				"children":
+				[
+					{
+					"caption": "Convert Py Var to Text",
+					"command": "datawizardpyvartotext"
+					},
+					{
+					"caption": "Lower Case Sql",
+					"command": "datawizardsqltolowercaser"
+					},
+				]
+			},
+
+		]
+	}
+]
