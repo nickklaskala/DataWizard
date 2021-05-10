@@ -42,38 +42,6 @@
 					"caption": "Keep Delimiters",
 					"command": "datawizardkeepdelimiters"
 					},
-				]
-			},
-
-			{
-				"caption": "Random", 
-				"id": "Random", 
-				"children":
-				[
-					{
-					"caption": "First Name",
-					"command": "datawizardrandomfirstname"
-					},
-					{
-					"caption": "Address",
-					"command": "datawizardrandomaddress"
-					},
-					{
-					"caption": "State Abbv",
-					"command": "datawizardrandomstateabbv"
-					},
-					{
-					"caption": " LastName",
-					"command": "datawizardrandomlastname"
-					},
-					{
-					"caption": "City",
-					"command": "datawizardrandomcity"
-					},
-					{
-					"caption": "Phone Number",
-					"command": "datawizardrandomphonenumber"
-					},
 					{
 					"caption": "Suffle Char Vertical",
 					"command": "datawizardrandomshufflecharvertically"
