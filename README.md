@@ -1,15 +1,16 @@
 # DataWizard
-ST3 package for advance data manipulation of flat files. supports pivot datagird, pop columns to end (cycle), justify columns, collapse columns, data masking(suffle list, suffle characters in column vertically to preserve format string), generating random first name/last names/address/state codes/citys/phone numbers. This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
+ST3 package for advance data manipulation of flat files. supports pivot datagird, pop columns to end (cycle), justify columns, collapse columns, data masking(suffle list, suffle characters in column vertically to preserve format string). This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
 
 Notes: it is strongly recommended to key bind the pivot, pop, justify, and collapse commands.
 Recommended Key Bindings
-[
-	{ "keys": ["alt+\\"], "command": "datawiziardjustifycolumns"},
-	{ "keys": ["alt+shift+\\"], "command": "datawizardcollapsecolumns"},
-	{ "keys": ["alt+shift+p"], "command": "datawizardpivotjustify"},
-	{ "keys": ["alt+p"], "command": "datawizardpivot"},
-	{ "keys": ["alt+o"], "command": "datawizardpop"}
-]
+
+    [
+        { "keys": ["alt+\\"], "command": "datawiziardjustifycolumns"},
+        { "keys": ["alt+shift+\\"], "command": "datawizardcollapsecolumns"},
+        { "keys": ["alt+shift+p"], "command": "datawizardpivotjustify"},
+        { "keys": ["alt+p"], "command": "datawizardpivot"},
+        { "keys": ["alt+o"], "command": "datawizardpop"}
+    ]
 
 
 Justify Columns (auto detects delimiters)
@@ -49,11 +50,3 @@ Other misc function
 Read Py Variables
 ![PyVarToText](https://github.com/nickklaskala/DataWizard/blob/main/Media/PyVarToText.gif)
 
-Recommended Key Bindings
-[
-	{ "keys": ["alt+\\"], "command": "datawiziardjustifycolumns"},
-	{ "keys": ["alt+shift+\\"], "command": "datawizardcollapsecolumns"},
-	{ "keys": ["alt+shift+p"], "command": "datawizardpivotjustify"},
-	{ "keys": ["alt+p"], "command": "datawizardpivot"},
-	{ "keys": ["alt+o"], "command": "datawizardpop"}
-]
