@@ -1,5 +1,5 @@
 # DataWizard
-ST3 package for advance data manipulation of flat files. supports pivot datagird, pop columns to end (cycle), justify columns, collapse columns, data masking(suffle list, suffle characters in column vertically to preserve format string). This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
+ST3/ST4 package for advance data manipulation of flat files. supports pivot datagird, pop columns to end (cycle), justify columns, collapse columns, data masking(suffle list, suffle characters in column vertically to preserve format string). This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
 
 Notes: it is strongly recommended to key bind the pivot, pop, justify, and collapse commands.
 Recommended Key Bindings

@@ -1,78 +1,54 @@
 [
 	{
-	"caption": "Justify Columns",
+	"caption": "DataWizard:Justify Columns",
 	"command": "datawiziardjustifycolumns"
 	},
 	{
-	"caption": "Collapse Columns",
+	"caption": "DataWizard:Collapse Columns",
 	"command": "datawizardcollapsecolumns"
 	},
 	{
-	"caption": "Data Pivot",
+	"caption": "DataWizard:Data Pivot",
 	"command": "datawizardpivot"
 	},
 	{
-	"caption": "Data Pop",
+	"caption": "DataWizard:Data Pop",
 	"command": "datawizardpop"
 	},
 	{
-	"caption": "Get Distinct Chars",
+	"caption": "DataWizard:Get Distinct Chars",
 	"command": "datawizarddistinctchars"
 	},
 	{
-	"caption": "Convert Py Var to Text",
+	"caption": "DataWizard:Convert Py Var to Text",
 	"command": "datawizardpyvartotext"
 	},
 	{
-	"caption": "Keep Delimiters",
+	"caption": "DataWizard:Keep Delimiters",
 	"command": "datawizardkeepdelimiters"
 	},
 	{
-	"caption": "Add Leading Zeros",
+	"caption": "DataWizard:Add Leading Zeros",
 	"command": "datawizardleadingzerosadd"
 	},
 	{
-	"caption": "Remove Leading Zeros",
+	"caption": "DataWizard:Remove Leading Zeros",
 	"command": "datawizardleadingzerosremove"
 	},
 	{
-	"caption": "Lower Case Sql",
+	"caption": "DataWizard:Lower Case Sql",
 	"command": "datawizardsqltolowercaser"
 	},
 	{
-	"caption": "First Name",
-	"command": "datawizardrandomfirstname"
-	},
-	{
-	"caption": " Address",
-	"command": "datawizardrandomaddress"
-	},
-	{
-	"caption": " State Abbv",
-	"command": "datawizardrandomstateabbv"
-	},
-	{
-	"caption": " LastName",
-	"command": "datawizardrandomlastname"
-	},
-	{
-	"caption": "City",
-	"command": "datawizardrandomcity"
-	},
-	{
-	"caption": "Phone Number",
-	"command": "datawizardrandomphonenumber"
-	},
-	{
-	"caption": "Suffle Char Vertical",
+	"caption": "DataWizard:Suffle Char Vertical",
 	"command": "datawizardrandomshufflecharvertically"
 	},
 	{
-	"caption": "Suffle Column Vertical",
+	"caption": "DataWizard:Suffle Column Vertical",
 	"command": "datawizardrandomshufflecolumnvertically"
 	},
 	{
-	"caption": "Sample",
+	"caption": "DataWizard:Sample",
 	"command": "datawizardstatisticssample"
 	}
 ]
