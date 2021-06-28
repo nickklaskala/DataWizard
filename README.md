@@ -40,7 +40,10 @@ Shuffle Columns
 Shuffle Characters vertically within equal length strings
 ![ShuffleCharsVertically](https://github.com/nickklaskala/DataWizard/blob/main/Media/ShuffleCharsVertically.gif)
 
-Sample File
+Sample Delimited
+![Sample](https://github.com/nickklaskala/DataWizard/blob/main/Media/SampleDelimited.gif)
+
+Sample JSON
 ![Sample](https://github.com/nickklaskala/DataWizard/blob/main/Media/Sample.gif)
 
 Distinct Characters

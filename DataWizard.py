@@ -443,7 +443,7 @@ class datawizardrandomshufflecharverticallyCommand(sublime_plugin.TextCommand):
 
 
 
-class datawizardstatisticssampleCommand(sublime_plugin.TextCommand):
+class datawizardstatisticssamplejsonCommand(sublime_plugin.TextCommand):
 	def format(self,data):
 		data=data.strip()
 
@@ -473,3 +473,55 @@ class datawizardstatisticssampleCommand(sublime_plugin.TextCommand):
 			outData=self.format(inData)
 			self.view.replace(edit, region, outData)
 
+
+
+class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
+	def format(self,data):
+		data=data.strip()
+
+		#get delimiter
+		dct={}
+		for i in set(data.splitlines()[0]):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+				dct[i]=data.splitlines()[0].count(i)
+		delimiter=(max(dct,key=dct.get))
+
+		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
+		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
+
+		data2=data
+
+		for c in range(0,len(data[0])):
+			col=[v[c] for v in data[1:]]
+			col=list(set(col))
+			col.sort()
+			col.extend(['' for i in data[1:]])
+			col=col[0:len(data)-1]
+			for v in range(0,len(col)):
+				data2[v+1][c]=col[v]
+
+		data=data2
+		maxList=[]
+		for i in range(len(data[0])):
+			maxlen=0
+			for r in range(len(data)):
+				if len(data[r][i])>maxlen:
+					maxlen=len(data[r][i])
+			maxList.append(maxlen)
+
+		rst=[]
+		for i in range(len(data)):
+			record=data[i]
+			temp=[]
+			for c in range(len(record)):
+				temp.append(record[c]+' '*(maxList[c]-len(record[c])))
+
+			rst.append(delimiter.join(temp))
+
+		return '\n'.join(rst)
+
+	def run(self, edit):
+		for region in self.view.sel():
+			inData=self.view.substr(region)
+			outData=self.format(inData)
+			self.view.replace(edit, region, outData)

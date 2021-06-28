@@ -59,8 +59,12 @@
 				"children":
 				[
 					{
-					"caption": "Sample file",
-					"command": "datawizardstatisticssample"
+					"caption": "Sample File",
+					"command": "datawizardstatisticssampledelimited"
+					},
+					{
+					"caption": "Sample Json",
+					"command": "datawizardstatisticssamplejson"
 					},
 					{
 					"caption": "Get Distinct Chars",
