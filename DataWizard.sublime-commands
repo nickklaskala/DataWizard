@@ -12,6 +12,10 @@
 	"command": "datawizardpivot"
 	},
 	{
+	"caption": "DataWizard:Data Pivot and Justify",
+	"command": "datawizardpivotjustify"
+	},
+	{
 	"caption": "DataWizard:Data Pop",
 	"command": "datawizardpop"
 	},

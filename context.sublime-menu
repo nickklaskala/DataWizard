@@ -24,7 +24,7 @@
 					},
 					{
 					"caption": "Data Pivot and Justify (file size sensitive)",
-					"command": "datawizardpivot"
+					"command": "datawizardpivotjustify"
 					},
 					{
 					"caption": "Data Pop",
