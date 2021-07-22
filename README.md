@@ -53,3 +53,5 @@ Other misc function
 Read Py Variables
 ![PyVarToText](https://github.com/nickklaskala/DataWizard/blob/main/Media/PyVarToText.gif)
 
+SQL Inserts
+![PyVarToText](https://github.com/nickklaskala/DataWizard/blob/main/Media/SQLInserts.gif)

@@ -54,9 +54,13 @@
 	{
 	"caption": "DataWizard:Sample JSON",
 	"command": "datawizardstatisticssamplejson"
-	}
+	},
 	{
 	"caption": "DataWizard:Sample delimited",
 	"command": "datawizardstatisticssampledelimited"
+	},
+	{
+	"caption": "DataWizard:Delimited to SQL Inserts",
+	"command": "datawizardconverttosqlinsert"
 	}
 ]
