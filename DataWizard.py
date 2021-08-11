@@ -20,7 +20,7 @@ class datawiziardjustifycolumnsCommand(sublime_plugin.TextCommand):
 		#get delimiter
 		dct={}
 		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -64,7 +64,7 @@ class datawizardcollapsecolumnsCommand(sublime_plugin.TextCommand):
 		fline=[i for i in data.splitlines()][0]
 		dct={}
 		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -93,7 +93,7 @@ class datawizardpivotCommand(sublime_plugin.TextCommand):
 		fline=[i for i in data.splitlines()][0]
 		dct={}
 		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -148,7 +148,7 @@ class datawizardpivotjustifyCommand(sublime_plugin.TextCommand):
 		fline=[i for i in data.splitlines()][0]
 		dct={}
 		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -203,7 +203,7 @@ class datawizardpopCommand(sublime_plugin.TextCommand):
 		fline=[i for i in data.splitlines()][0]
 		dct={}
 		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -268,7 +268,7 @@ class datawizardkeepdelimitersCommand(sublime_plugin.TextCommand):
 		#get delimiter
 		dct={}
 		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -450,7 +450,7 @@ class datawizardstatisticssamplejsonCommand(sublime_plugin.TextCommand):
 		#get delimiter
 		dct={}
 		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -482,7 +482,7 @@ class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
 		#get delimiter
 		dct={}
 		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
@@ -534,7 +534,7 @@ class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 		#get delimiter
 		dct={}
 		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
