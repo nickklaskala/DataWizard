@@ -1,7 +1,6 @@
 # DataWizard
-ST3/ST4 package for advance data manipulation of flat files. supports pivot datagird, pop columns to end (cycle), justify columns, collapse columns, data masking(suffle list, suffle characters in column vertically to preserve format string). This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
-
-Notes: it is strongly recommended to key bind the pivot, pop, justify, and collapse commands.
+ST3/ST4 package for advanced data manipulation in delimited flat files (.csv, .psv, .tsv, .txt, .dat .etc). Supports auto detection of delimiters, Justification of delimited file, collapsing delimited files, pivoting delimited files, pop columns to end (cycling first column to end in pivoted data sets, see example), data masking(shuffle list, shuffle characters), data sampling, and converting datagrid to sql insert statements. This Package is especially helpful for ETL or any task that interfaces with delimited flat files in which you are constantly opening files and inspecting them. Allows for instant human readability and analysis.
+Notes: it's strongly recommended to key bind the justify, collapse, pivot, and pop commands.
 Recommended Key Bindings
 
     [
@@ -31,9 +30,6 @@ Pop
 LeadingZerosAddRemove
 ![LeadingZerosAddRemove](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/LeadingZerosAddRemove.gif)
 
-Random data
-![Random](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Random.gif)
-
 Shuffle Columns
 ![ShuffleColumnVertically](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/ShuffleColumnVertically.gif)
 
@@ -49,9 +45,9 @@ Sample JSON
 Distinct Characters
 ![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctChars.gif)
 
+SQL Inserts(batched in groups of 1000)
+![PyVarToText](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SQLInserts.gif)
+
 Other misc function
 Read Py Variables
 ![PyVarToText](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/PyVarToText.gif)
-
-SQL Inserts
-![PyVarToText](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SQLInserts.gif)
