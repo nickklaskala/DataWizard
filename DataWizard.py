@@ -18,7 +18,7 @@ class datawiziardjustifycolumnsCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		#get delimiter
-		dct={}
+		dct={'|':0}
 		for i in set(data.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
@@ -62,7 +62,7 @@ class datawizardcollapsecolumnsCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		fline=[i for i in data.splitlines()][0]
-		dct={}
+		dct={'|':0}
 		for i in set(fline):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
@@ -91,7 +91,7 @@ class datawizardpivotCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		fline=[i for i in data.splitlines()][0]
-		dct={}
+		dct={'|':0}
 		for i in set(fline):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
@@ -146,7 +146,7 @@ class datawizardpivotjustifyCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		fline=[i for i in data.splitlines()][0]
-		dct={}
+		dct={'|':0}
 		for i in set(fline):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
@@ -201,7 +201,7 @@ class datawizardpopCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		fline=[i for i in data.splitlines()][0]
-		dct={}
+		dct={'|':0}
 		for i in set(fline):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=fline.count(i)
@@ -266,7 +266,7 @@ class datawizardkeepdelimitersCommand(sublime_plugin.TextCommand):
 
 
 		#get delimiter
-		dct={}
+		dct={'|':0}
 		for i in set(data.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
@@ -448,7 +448,7 @@ class datawizardstatisticssamplejsonCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		#get delimiter
-		dct={}
+		dct={'|':0}
 		for i in set(data.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
@@ -480,7 +480,7 @@ class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
 		data=data.strip()
 
 		#get delimiter
-		dct={}
+		dct={'|':0}
 		for i in set(data.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
@@ -529,66 +529,50 @@ class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
 
 class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 	def format(self,data):
+
 		data=data.strip()
 
 		#get delimiter
-		dct={}
+		dct={'|':0}
 		for i in set(data.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
 				dct[i]=data.splitlines()[0].count(i)
 		delimiter=(max(dct,key=dct.get))
 
-		dest='#temptable'
-		file=data.splitlines()
+		#Variable
+		dest   = '#temptable'
+		data   = [l.strip() for l in data.splitlines()]
+		headers= data.pop(0).strip().split(delimiter)
+		table  = [f for f in data]
+		sql    = ''
 
-		table=[f for f in file[1:]]
-		headers=file.pop(0).replace('\n','').split(delimiter)
-		sql=''
-
-		print(headers)
-		for f in range(0,len(table)):
-			values=table[f]
-			values=[j if j!='' else 'NULL' for j in values.replace('\n','').split(delimiter)]
-			values=[j.replace("'","''") for j in values]
-			values=["'"+j+"'" if j !='NULL' else 'NULL' for j in values]
-			table[f]=values
-			sql+='('
-			sql+=','.join(values)
-			sql+=')\n'
+		for record in range(0,len(table)):
+			tempRow=table[record]
+			tempRow=[j.strip() if j!='' else 'NULL' for j in tempRow.split(delimiter)]
+			tempRow=[j.replace("'","''") for j in tempRow]
+			tempRow=["'"+j+"'" if j !='NULL' else 'NULL' for j in tempRow]
+			table[record]=tempRow
 
 
+		sql='--drop table if exists #TempTable\ngo\n\ncreate table #TempTable\n(\n\trow_id int identity(1,1),\n'
 
-		sql='--Drop Table if exists '+dest+'\ngo\n\ncreate table '+dest+'\n(\n\trow_id int identity(1,1),\n'
 		for i in range(0,len(headers)):
-			maxlen=0
-			for r in range(0,len(table)):
-				if len(table[r][i])>maxlen:
-					maxlen=len(table[r][i])
+			maxlen=max(len(table[r][i]) for r in range(0,len(table) if len(table)<=2000 else 2000))
 			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(maxlen)+'),\n'
 
 		sql+=')\ngo\n\n'
 
 
 		for i in range(0,len(table)):
-
 			if i%1000==0:
-				sql+='\ninsert into '+dest+' ('
-
-				for x in range(0,len(headers)):
-					if x!=0:
-						sql+=', '
-					sql=sql+'['+headers[x]+']'
-
-				sql+=')\nvalues '
+				sql+='\ninsert into #TempTable ('+','.join(['['+i+']' for i in headers])+')\nvalues '
 
 
 			values=table[i]
 			if i%1000!=0:
 				sql+=','
 			
-			sql+='('
-			sql+=','.join(values)
-			sql+=')\n'
+			sql+='('+    ','.join(values)    +')\n'
 
 		return sql
 
