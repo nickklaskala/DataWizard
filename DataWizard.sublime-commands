@@ -62,5 +62,9 @@
 	{
 	"caption": "DataWizard:Delimited to SQL Inserts",
 	"command": "datawizardconverttosqlinsert"
-	}
+	},
+	{
+	"caption": "open line(s) to chrome tab(s)",
+	"command": "datawizardopenchrometab"
+	},
 ]

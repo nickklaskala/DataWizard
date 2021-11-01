@@ -581,3 +581,18 @@ class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 			inData=self.view.substr(region)
 			outData=self.format(inData)
 			self.view.replace(edit, region, outData)
+
+
+class datawizardopenchrometabCommand(sublime_plugin.TextCommand):
+	print('datawizardopenchrometabCommand')
+	def format(self,data):
+		links=data.split()
+		for link in links:
+			webbrowser.open_new_tab(link)
+		return data
+
+	def run(self, edit):
+		for region in self.view.sel():
+			inData=self.view.substr(region)
+			outData=self.format(inData)
+			self.view.replace(edit, region, outData)
