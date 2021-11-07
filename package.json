@@ -1,0 +1,38 @@
+{
+  "name": "testpy",
+  "displayName": "Test Py",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.58.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./build/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "testpy.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "testpy.askQuestion",
+        "title": "Ask Question"
+      }
+    ],
+    "configuration": {
+      "title": "Test Py",
+      "properties": {}
+    },
+    "keybindings": [
+      {
+        "command": "testpy.askQuestion",
+        "key": "ALT+5"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onCommand:testpy.helloWorld",
+    "onCommand:testpy.askQuestion"
+  ]
+}
