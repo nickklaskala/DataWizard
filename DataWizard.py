@@ -3,10 +3,100 @@ import sublime_plugin
 import csv
 import re
 import pprint
+
 import json
 from random import shuffle
 from random import randrange
 from collections import OrderedDict
+import webbrowser
+
+
+
+def runEdit(self, edit):
+	for region in self.view.sel():
+		inData=self.view.substr(region)
+		outData=self.format(inData)
+		self.view.replace(edit, region, outData)
+
+
+
+class dataGrid:
+
+	text=''
+	delimiter=''
+	grid=[]
+	sampleGrid=[]
+	maxColWidth=[]
+	sampleMaxColWidth=[]
+
+	def __init__(self, text):
+		self.text       = text.strip()
+		self.delimiter  = self.getDelimiter(text)
+		self.grid       = self.getGrid(self.text,self.delimiter)
+		
+	
+
+	def getDelimiter(self,text):
+		dct={'|':0}
+		for i in set(text.splitlines()[0]):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
+				dct[i]=text.splitlines()[0].count(i)
+		return (max(dct,key=dct.get))
+
+	def getGrid(self,text,delimiter):
+		grid=[[l.strip() if delimiter not in l.strip() else '"'+l.strip()+'"' for l in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar='"')]
+		self.maxColWidth= self.getMaxColumnWidth(grid)
+		return grid
+
+
+	def getMaxColumnWidth(self,grid):
+		maxColWidth=[]
+		for i in range(len(grid[0])):
+			maxlen=0
+			for r in range(len(grid)):
+				try:
+					if len(grid[r][i])>maxlen:
+						maxlen=len(grid[r][i])
+				except:
+					pass
+			maxColWidth.append(maxlen)
+		return maxColWidth
+
+	def getSampleGrid(self):
+		self.sampleGrid=[row for row in list(self.grid)]
+		for c in range(0,len(self.grid[0])):
+			col=[v[c] for v in self.grid[1:]]
+			col=list(set(col))
+			col.sort()
+			col.extend(['' for i in self.grid[1:]])
+			col=col[0:len(self.grid)-1]
+			for v in range(0,len(col)):
+				self.sampleGrid[v+1][c]=col[v]
+		self.sampleMaxColWidth=self.getMaxColumnWidth(self.sampleGrid)
+
+	def constructTextFromGrid(self,grid,delimiter,maxColWidth=None):#list of list ie grid
+		if maxColWidth==None:
+			rst='\n'.join([delimiter.join(i) for i in grid])
+		else:
+			rst=[]
+			for i in range(len(grid)):
+				record , temp = grid[i] , []
+
+				for c in range(len(record)):
+					temp.append(record[c]+' '*(maxColWidth[c]-len(record[c])))
+				rst.append(delimiter.join(temp))
+			rst='\n'.join(rst)
+		return rst
+
+	def pivotGrid(self):
+		self.grid=[list(x) for x in zip(*self.grid)]
+		self.maxColWidth=self.getMaxColumnWidth(self.grid)
+
+	def popGrid(self):
+		for i in range(len(self.grid)):
+			temp=self.grid[i].pop(1)
+			self.grid[i].append(temp)
+		self.maxColWidth=self.getMaxColumnWidth(self.grid)
 
 
 
@@ -14,290 +104,85 @@ from collections import OrderedDict
 
 
 class datawiziardjustifycolumnsCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		maxList=[]
-		for i in range(len(data[0])):
-			maxlen=0
-			for r in range(len(data)):
-				if len(data[r][i])>maxlen:
-					maxlen=len(data[r][i])
-			maxList.append(maxlen)
-
-
-		rst=[]
-		for i in range(len(data)):
-			record=data[i]
-			temp=[]
-			for c in range(len(record)):
-				temp.append(record[c]+' '*(maxList[c]-len(record[c])))
-
-
-			rst.append(delimiter.join(temp))
-
-		return '\n'.join(rst)
+	def format(self,text):
+		a=dataGrid(text)
+		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
-
+		runEdit(self, edit)
 
 
 class datawizardcollapsecolumnsCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		fline=[i for i in data.splitlines()][0]
-		dct={'|':0}
-		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=fline.count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		maxList=[]
-		for i in range(len(data)):
-			data[i]=[n.strip() for n in data[i]]		
-	
-
-
-		return '\n'.join([delimiter.join(i) for i in data])
+	def format(self,text):
+		a=dataGrid(text)
+		rst=a.constructTextFromGrid(a.grid,a.delimiter)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
+		runEdit(self, edit)
 
 
 class datawizardpivotCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		fline=[i for i in data.splitlines()][0]
-		dct={'|':0}
-		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=fline.count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		data2=[]
-		for i in range(len(data[0])):
-			data2.append([data[0][i]])
-			for n in range(len(data)):
-				if n==0:
-					continue
-				data2[i].append(data[n][i])
-		data=data2
-
-
-		maxList=[]
-		for i in range(len(data[0])):
-			maxlen=0
-			for r in range(len(data)):
-				if len(data[r][i])>maxlen:
-					maxlen=len(data[r][i])
-			maxList.append(maxlen)
-
-
-		rst=[]
-		for i in range(len(data)):
-			record=data[i]
-			temp=[]
-			for c in range(len(record)):
-				temp.append(record[c]+''*(maxList[c]-len(record[c])))
-
-
-			rst.append(delimiter.join(temp))
-
-		return '\n'.join(rst)
-
-
-
+	def format(self,text):
+		a=dataGrid(text)
+		a.pivotGrid()
+		rst=a.constructTextFromGrid(a.grid,a.delimiter)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
+		runEdit(self, edit)
 
 
 class datawizardpivotjustifyCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		fline=[i for i in data.splitlines()][0]
-		dct={'|':0}
-		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=fline.count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		data2=[]
-		for i in range(len(data[0])):
-			data2.append([data[0][i]])
-			for n in range(len(data)):
-				if n==0:
-					continue
-				data2[i].append(data[n][i])
-		data=data2
-
-
-		maxList=[]
-		for i in range(len(data[0])):
-			maxlen=0
-			for r in range(len(data)):
-				if len(data[r][i])>maxlen:
-					maxlen=len(data[r][i])
-			maxList.append(maxlen)
-
-
-		rst=[]
-		for i in range(len(data)):
-			record=data[i]
-			temp=[]
-			for c in range(len(record)):
-				temp.append(record[c]+' '*(maxList[c]-len(record[c])))
-
-
-			rst.append(delimiter.join(temp))
-
-		return '\n'.join(rst)
-
-
-
+	def format(self,text):
+		a=dataGrid(text)
+		a.pivotGrid()
+		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
+		runEdit(self, edit)
 
 
 class datawizardpopCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		fline=[i for i in data.splitlines()][0]
-		dct={'|':0}
-		for i in set(fline):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=fline.count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		data=[row for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		#pop data index 0 to end
-		for i in range(len(data)):
-			temp=data[i].pop(1)
-			data[i].append(temp)
-
-		#measure spacing for new datagrid
-		maxList=[]
-		for i in range(len(data[0])):
-			maxlen=0
-			for r in range(len(data)):
-				if len(data[r][i])>maxlen:
-					maxlen=len(data[r][i])
-			maxList.append(maxlen)
-
-		#build new datagrid with proper spacing
-		rst=[]
-		for i in range(len(data)):
-			oldLine=data[i]
-			newLine=[]
-			for c in range(len(oldLine)):
-				newLine.append(oldLine[c]+' '*(maxList[c]-len(oldLine[c])))
-			rst.append(delimiter.join(newLine))
-
-		return '\n'.join(rst)
-
-
-
+	def format(self,text):
+		a=dataGrid(text)
+		a.popGrid()
+		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
-
+		runEdit(self, edit)
 
 
 class datawizarddistinctcharsCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=''.join(set(data))
-		data='\n'.join(sorted([i for i in data]))
-		
-		return data
+	def format(self,text):
+		text='\n'.join(sorted(list(set(text))))
+		return text
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
+		runEdit(self, edit)
 
 
 class datawizardkeepdelimitersCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-
-
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-
-		new=''
-		for i in range(len(data)):
-			if data[i] in ('\n',delimiter):
-				new+=data[i]
-
-
-		return new
+	def format(self,text):
+		a=dataGrid(text)
+		newtext=''.join([c for c in text if c in ('\n',a.delimiter)])
+		return newtext
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
-
-
+		runEdit(self, edit)
 
 
 class datawizardleadingzerosaddCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		
-		data=data.split('\n')
+	def format(self,text):
+
+		data=text.split('\n')
 
 		def replace_str_index(text,index=0,replacement=''):
 			return '%s%s%s'%(text[:index],replacement,text[index+1:])
-		
+
 		for i in range(0,len(data)):
 			for c in range(0,len(data[i])):
 				if data[i][c]==' ':
@@ -308,83 +193,74 @@ class datawizardleadingzerosaddCommand(sublime_plugin.TextCommand):
 		return '\n'.join(data)
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 
 
 class datawizardleadingzerosremoveCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		
-		data=data.split('\n')
+	def format(self,text):
+
+		lines=text.split('\n')
 
 		def replace_str_index(text,index=0,replacement=''):
 			return '%s%s%s'%(text[:index],replacement,text[index+1:])
-		
-		for i in range(0,len(data)):
-			for c in range(0,len(data[i])):
-				if data[i][c]=='0':
-					data[i]=replace_str_index(data[i],c,' ')
+
+		for i in range(0,len(lines)):
+			for c in range(0,len(lines[i])):
+				if lines[i][c]=='0':
+					lines[i]=replace_str_index(lines[i],c,' ')
 				else:
 					break
 
-		return '\n'.join(data)
+		return '\n'.join(lines)
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 
 
 
 class datawizardsqltolowercaserCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.splitlines()
+	def format(self,text):
+		lines=text.splitlines()
 		words = ['else','then','string_agg','returns','bit','nolock','use','go','clustered','after','nocount','on','raiserror','instead','of','enable','trigger','upper','isnull','lower','rank','over','partition','when','datediff','cast','convert','add','constraint','alter','column','table','all','and','any','as','asc','backup','database','between','case','check','create','index','or','replace','view','procedure','unique','default','delete','desc','distinct','drop','exec','exists','foreign','key','from','full','outer','join','group','by','having','in','inner','insert','into','select','is','null','not','left','like','limit','order','primary','right','rownum','top','set','truncate','union','update','values','where','cross','date','datetime','execute','max','concat','for','fetch','next','close','open','varchar','int','object','declare','end','try','print','catch','with','begin','proc']
-		
-		
+
+
 		lowercase = lambda x: x.group(1).lower()
 		test = '\b({})\b'.format('|'.join(words))
 		re_replace = re.compile(r'\b({})\b'.format('|'.join(words)),re.IGNORECASE)
 		cflag=0
-		for i in range(0,len(data)):
-			if '/*' in data[i] and '*/' not in data[i]:
+		for i in range(0,len(lines)):
+			if '/*' in lines[i] and '*/' not in lines[i]:
 				cflag=1
-			if '*/' in data[i]:
+			if '*/' in lines[i]:
 				cflag=0
 			if cflag==1:
 				continue
-			temp=data[i].split('--')
+			temp=lines[i].split('--')
 			temp[0]=re_replace.sub(lowercase, temp[0])
-			data[i]='--'.join(temp)
-		return '\n'.join(data)
+			lines[i]='--'.join(temp)
+		return '\n'.join(lines)
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 
 class datawizardpyvartotextCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.splitlines()
+	def format(self,text):
+		lines=text.splitlines()
 
-		
-		for i in range(0,len(data)):
-			data[i]=data[i].replace('\\n','\n').replace('\\t','\t')
-			
-		return '\n'.join(data)
+		for i in range(0,len(lines)):
+			lines[i]=lines[i].replace('\\n','\n').replace('\\t','\t')
+
+		return '\n'.join(lines)
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 class datawizardrandomshufflecolumnverticallyCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -444,176 +320,96 @@ class datawizardrandomshufflecharverticallyCommand(sublime_plugin.TextCommand):
 
 
 class datawizardstatisticssamplejsonCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
+	def format(self,text):
+		a=dataGrid(text)
 
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		stats=OrderedDict()
-		for i in range(0,len(data[0])):
-			stats[data[0][i]]=list(set([x[i] for x in data[1:]]))
-
+		stats={}
+		for i in range(len(a.grid[0])):
+			row=[row[i] for row in a.grid[1:]]
+			stats[a.grid[0][i]]=[(row.count(val),val) for val in set(row)]
 
 		json_object = json.dumps(stats, indent = 4)
-
 
 		return json_object
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 
 
 class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
+	def format(self,text):
+		a=dataGrid(text)
+		a.getSampleGrid()
 
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		data2=data
-
-		for c in range(0,len(data[0])):
-			col=[v[c] for v in data[1:]]
-			col=list(set(col))
-			col.sort()
-			col.extend(['' for i in data[1:]])
-			col=col[0:len(data)-1]
-			for v in range(0,len(col)):
-				data2[v+1][c]=col[v]
-
-		data=data2
-		maxList=[]
-		for i in range(len(data[0])):
-			maxlen=0
-			for r in range(len(data)):
-				if len(data[r][i])>maxlen:
-					maxlen=len(data[r][i])
-			maxList.append(maxlen)
-
-		rst=[]
-		for i in range(len(data)):
-			record=data[i]
-			temp=[]
-			for c in range(len(record)):
-				temp.append(record[c]+' '*(maxList[c]-len(record[c])))
-
-			rst.append(delimiter.join(temp))
-
-		return '\n'.join(rst)
+		rst=a.constructTextFromGrid(a.sampleGrid,a.delimiter,a.sampleMaxColWidth)
+		return rst
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
 
 
 class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
-	def format(self,data):
+	def format(self,text):
+		a=dataGrid(text)
 
-		data=data.strip()
-
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		#Variable
-		dest   = '#temptable'
-		data   = [l.strip() for l in data.splitlines()]
-		headers= data.pop(0).strip().split(delimiter)
-		table  = [f for f in data]
-		sql    = ''
-
-		for record in range(0,len(table)):
-			tempRow=table[record]
-			tempRow=[j.strip() if j!='' else 'NULL' for j in tempRow.split(delimiter)]
-			tempRow=[j.replace("'","''") for j in tempRow]
-			tempRow=["'"+j+"'" if j !='NULL' else 'NULL' for j in tempRow]
-			table[record]=tempRow
+		headers=a.grid[0]
+		table=[["'"+f.replace("'","''")+"'" if f!='' else 'NULL' for f in row] for row in a.grid[1:] ]
+		sql = ''
 
 
 		sql='--drop table if exists #TempTable\ngo\n\ncreate table #TempTable\n(\n\trow_id int identity(1,1),\n'
 
-		for i in range(0,len(headers)):
-			maxlen=max(len(table[r][i]) for r in range(0,len(table) if len(table)<=2000 else 2000))
-			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(maxlen)+'),\n'
+		for i in range(len(headers)):
+			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(a.maxColWidth[i])+'),\n'
 
 		sql+=')\ngo\n\n'
-
 
 		for i in range(0,len(table)):
 			if i%1000==0:
 				sql+='\ninsert into #TempTable ('+','.join(['['+i+']' for i in headers])+')\nvalues '
 
-
 			values=table[i]
 			if i%1000!=0:
 				sql+=','
-			
+
 			sql+='('+    ','.join(values)    +')\n'
+
+		for i in range(len(a.grid)):
+			if len(a.grid[i])!=len(a.grid[0]):
+				sql+='\n\n{1} UNEQUAL NUMBER OF COLUMNS ON ORIGINAL DATASET LINE {0} PLEASE CORRECT AND RE-RUN {1}\n\n'.format(i,'*'*50)
 
 		return sql
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
+
 
 
 class datawizardopenchrometabCommand(sublime_plugin.TextCommand):
-	print('datawizardopenchrometabCommand')
-	def format(self,data):
-		links=data.split()
+	def format(self,text):
+		links=text.split()
 		for link in links:
 			webbrowser.open_new_tab(link)
-		return data
+		return text
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
+
+
 
 
 
 class datawizardcrosstabCommand(sublime_plugin.TextCommand):
-	def format(self,data):
-		data=data.strip()
-
-		#get delimiter
-		dct={'|':0}
-		for i in set(data.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
-				dct[i]=data.splitlines()[0].count(i)
-		delimiter=(max(dct,key=dct.get))
-
-		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
-		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
-
-		import pandas as pd
+	def format(self,text):
+		import pandas as pd #todo - currently not available
+		text=text.strip()
+		delimiter=getDelimiter(data)
+		data=getDatagrid(text,delimiter)
 
 		# Create the pandas DataFrame
 		df = pd.DataFrame(data[1:], columns = data[0])
@@ -621,7 +417,5 @@ class datawizardcrosstabCommand(sublime_plugin.TextCommand):
 		return eval("print(pd.crosstab(df.{0},[{1}]))".format(data[0][0],','.join(['df.'+c for c in data[0][1:]])))
 
 	def run(self, edit):
-		for region in self.view.sel():
-			inData=self.view.substr(region)
-			outData=self.format(inData)
-			self.view.replace(edit, region, outData)
+		runEdit(self, edit)
+
