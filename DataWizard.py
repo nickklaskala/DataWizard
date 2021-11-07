@@ -596,3 +596,32 @@ class datawizardopenchrometabCommand(sublime_plugin.TextCommand):
 			inData=self.view.substr(region)
 			outData=self.format(inData)
 			self.view.replace(edit, region, outData)
+
+
+
+class datawizardcrosstabCommand(sublime_plugin.TextCommand):
+	def format(self,data):
+		data=data.strip()
+
+		#get delimiter
+		dct={'|':0}
+		for i in set(data.splitlines()[0]):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
+				dct[i]=data.splitlines()[0].count(i)
+		delimiter=(max(dct,key=dct.get))
+
+		# data=[i.split(delimiter) for i in data.splitlines() if i !='']
+		data=[[l.strip() for l in row] for row in csv.reader(data.splitlines(), delimiter=delimiter, quotechar='"')]
+
+		import pandas as pd
+
+		# Create the pandas DataFrame
+		df = pd.DataFrame(data[1:], columns = data[0])
+
+		return eval("print(pd.crosstab(df.{0},[{1}]))".format(data[0][0],','.join(['df.'+c for c in data[0][1:]])))
+
+	def run(self, edit):
+		for region in self.view.sel():
+			inData=self.view.substr(region)
+			outData=self.format(inData)
+			self.view.replace(edit, region, outData)
