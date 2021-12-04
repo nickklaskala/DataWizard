@@ -350,6 +350,27 @@ class datawizardstatisticssampledelimitedCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
+class datawizardstatisticssampledelimiteddiffsCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		a=dataGrid(text)
+		a.pivotGrid()
+		
+		temp=[]
+		for row in a.grid:
+			if len(set(row[1:]))!=1:
+				temp.append(row)
+		a.grid=temp
+		a.pivotGrid()
+		a.getSampleGrid()
+		a.pivotGrid()
+
+		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
+		return rst
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
 
 class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 	def format(self,text):
