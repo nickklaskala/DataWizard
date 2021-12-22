@@ -13,6 +13,11 @@ import webbrowser
 
 
 def runEdit(self, edit):
+	text=''
+	for sel in self.view.sel():
+		text=text+self.view.substr(sel)
+	if text=='':
+		self.view.run_command("select_all")
 	for region in self.view.sel():
 		inData=self.view.substr(region)
 		outData=self.format(inData)
@@ -45,29 +50,24 @@ class dataGrid:
 
 	def getGrid(self,text,delimiter):
 		grid=[[l.strip() if delimiter not in l.strip() else '"'+l.strip()+'"' for l in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar='"')]
-		self.maxColWidth= self.getMaxColumnWidth(grid)
+		self.maxColWidth=self.getMaxColumnWidth(grid)
 		return grid
 
 
 	def getMaxColumnWidth(self,grid):
 		maxColWidth=[]
 		for i in range(len(grid[0])):
-			maxlen=0
-			for r in range(len(grid)):
-				try:
-					if len(grid[r][i])>maxlen:
-						maxlen=len(grid[r][i])
-				except:
-					pass
-			maxColWidth.append(maxlen)
+			try:
+				maxColWidth.append(max([len(r[i]) for r in grid]))
+			except:
+				maxColWidth.append(0)
 		return maxColWidth
 
 	def getSampleGrid(self):
-		self.sampleGrid=[row for row in list(self.grid)]
-		for c in range(0,len(self.grid[0])):
+		self.sampleGrid= list(self.grid)
+		for c in range(len(self.grid[0])):
 			col=[v[c] for v in self.grid[1:]]
-			col=list(set(col))
-			col.sort()
+			col=sorted(list(set(col)))
 			col.extend(['' for i in self.grid[1:]])
 			col=col[0:len(self.grid)-1]
 			for v in range(0,len(col)):
@@ -225,7 +225,7 @@ class datawizardleadingzerosremoveCommand(sublime_plugin.TextCommand):
 class datawizardsqltolowercaserCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		lines=text.splitlines()
-		words = ['else','then','string_agg','returns','bit','nolock','use','go','clustered','after','nocount','on','raiserror','instead','of','enable','trigger','upper','isnull','lower','rank','over','partition','when','datediff','cast','convert','add','constraint','alter','column','table','all','and','any','as','asc','backup','database','between','case','check','create','index','or','replace','view','procedure','unique','default','delete','desc','distinct','drop','exec','exists','foreign','key','from','full','outer','join','group','by','having','in','inner','insert','into','select','is','null','not','left','like','limit','order','primary','right','rownum','top','set','truncate','union','update','values','where','cross','date','datetime','execute','max','concat','for','fetch','next','close','open','varchar','int','object','declare','end','try','print','catch','with','begin','proc']
+		words = ['row_number','else','then','string_agg','returns','bit','nolock','use','go','clustered','after','nocount','on','raiserror','instead','of','enable','trigger','upper','isnull','lower','rank','over','partition','when','datediff','cast','convert','add','constraint','alter','column','table','all','and','any','as','asc','backup','database','between','case','check','create','index','or','replace','view','procedure','unique','default','delete','desc','distinct','drop','exec','exists','foreign','key','from','full','outer','join','group','by','having','in','inner','insert','into','select','is','null','not','left','like','limit','order','primary','right','rownum','top','set','truncate','union','update','values','where','cross','date','datetime','execute','max','concat','for','fetch','next','close','open','varchar','int','object','declare','end','try','print','catch','with','begin','proc']
 
 
 		lowercase = lambda x: x.group(1).lower()
