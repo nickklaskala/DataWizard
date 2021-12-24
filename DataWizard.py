@@ -38,8 +38,7 @@ class dataGrid:
 		self.text       = text.strip()
 		self.delimiter  = self.getDelimiter(text)
 		self.grid       = self.getGrid(self.text,self.delimiter)
-		
-	
+
 
 	def getDelimiter(self,text):
 		dct={'|':0}
@@ -375,32 +374,27 @@ class datawizardstatisticssampledelimiteddiffsCommand(sublime_plugin.TextCommand
 class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
-
 		headers=a.grid[0]
-		table=[["'"+f.replace("'","''")+"'" if f!='' else 'NULL' for f in row] for row in a.grid[1:] ]
-		sql = ''
-
 
 		sql='--drop table if exists #TempTable\ngo\n\ncreate table #TempTable\n(\n\trow_id int identity(1,1),\n'
 
-		for i in range(len(headers)):
-			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(a.maxColWidth[i])+'),\n'
+		for index,columHeader in enumerate(headers):
+			sql+='\t'+'['+columHeader+']'+' nvarchar('+str(a.maxColWidth[index])+'),\n'
 
 		sql+=')\ngo\n\n'
 
-		for i in range(0,len(table)):
-			if i%1000==0:
-				sql+='\ninsert into #TempTable ('+','.join(['['+i+']' for i in headers])+')\nvalues '
+		for index,row in enumerate(a.grid[1:]):
 
-			values=table[i]
-			if i%1000!=0:
+			if index%1000==0:
+				sql+='\ninsert into #TempTable ('+','.join(['['+col+']' for col in headers])+')\nvalues '
+			else:
 				sql+=','
 
-			sql+='('+    ','.join(values)    +')\n'
+			sql+='('+','.join(["'"+f.replace("'","''")+"'" if f!='' else 'NULL' for f in row])+')\n'
 
-		for i in range(len(a.grid)):
-			if len(a.grid[i])!=len(a.grid[0]):
-				sql+='\n\n{1} UNEQUAL NUMBER OF COLUMNS ON ORIGINAL DATASET LINE {0} PLEASE CORRECT AND RE-RUN {1}\n\n'.format(i,'*'*50)
+		for index,row in enumerate(a.grid):
+			if len(a.grid[index])!=len(a.grid[0]):
+				sql+='\n{1} UNEQUAL NUMBER OF COLUMNS ON ORIGINAL DATASET LINE {0} PLEASE CORRECT AND RE-RUN {1}'.format(index+1,'*'*50)
 
 		return sql
 

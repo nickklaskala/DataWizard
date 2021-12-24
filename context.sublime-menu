@@ -43,11 +43,11 @@
 					"command": "datawizardkeepdelimiters"
 					},
 					{
-					"caption": "Suffle Char Vertical",
+					"caption": "Shuffle Char Vertical",
 					"command": "datawizardrandomshufflecharvertically"
 					},
 					{
-					"caption": "Suffle Column Vertical",
+					"caption": "Shuffle Column Vertical",
 					"command": "datawizardrandomshufflecolumnvertically"
 					},
 				],
