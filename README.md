@@ -4,7 +4,7 @@ Notes: it's strongly recommended to key bind the justify, collapse, pivot, and p
 Recommended Key Bindings
 
     [
-        { "keys": ["alt+\\"], "command": "datawiziardjustifycolumns"},
+        { "keys": ["alt+\\"], "command": "datawizardjustifycolumns"},
         { "keys": ["alt+shift+\\"], "command": "datawizardcollapsecolumns"},
         { "keys": ["alt+shift+p"], "command": "datawizardpivotjustify"},
         { "keys": ["alt+p"], "command": "datawizardpivot"},

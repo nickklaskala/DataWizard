@@ -1,7 +1,7 @@
 [
 	{
 	"caption": "DataWizard:Justify Columns",
-	"command": "datawiziardjustifycolumns"
+	"command": "datawizardjustifycolumns"
 	},
 	{
 	"caption": "DataWizard:Collapse Columns",

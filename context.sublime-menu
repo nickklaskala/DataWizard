@@ -12,7 +12,7 @@
 				[
 					{
 					"caption": "Columns Justify",
-					"command": "datawiziardjustifycolumns"
+					"command": "datawizardjustifycolumns"
 					},
 					{
 					"caption": "Columns Collapse",

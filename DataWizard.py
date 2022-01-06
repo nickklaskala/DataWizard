@@ -35,10 +35,11 @@ class dataGrid:
 	sampleMaxColWidth=[]
 
 	def __init__(self, text):
-		self.text       = text.strip()
+		self.text       = text.strip('\n')
 		self.delimiter  = self.getDelimiter(text)
 		self.grid       = self.getGrid(self.text,self.delimiter)
-
+		
+	
 
 	def getDelimiter(self,text):
 		dct={'|':0}
@@ -102,7 +103,7 @@ class dataGrid:
 
 
 
-class datawiziardjustifycolumnsCommand(sublime_plugin.TextCommand):
+class datawizardjustifycolumnsCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
 		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
