@@ -64,28 +64,21 @@ class dataGrid:
 		return maxColWidth
 
 	def getSampleGrid(self):
-		self.sampleGrid= list(self.grid)
-		for c in range(len(self.grid[0])):
-			col=[v[c] for v in self.grid[1:]]
+		self.sampleGrid= [['' for x in y] for y in self.grid[1:]]
+		self.sampleGrid.insert(0,self.grid[0])
+		print(self.sampleGrid)
+		for x in range(len(self.grid[0])):
+			col=[y[x] for y in self.grid[1:]]
 			col=sorted(list(set(col)))
-			col.extend(['' for i in self.grid[1:]])
-			col=col[0:len(self.grid)-1]
-			for v in range(0,len(col)):
-				self.sampleGrid[v+1][c]=col[v]
+			for i in range(0,len(col)):
+				self.sampleGrid[i+1][x]=col[i]
 		self.sampleMaxColWidth=self.getMaxColumnWidth(self.sampleGrid)
 
 	def constructTextFromGrid(self,grid,delimiter,maxColWidth=None):#list of list ie grid
 		if maxColWidth==None:
 			rst='\n'.join([delimiter.join(i) for i in grid])
 		else:
-			rst=[]
-			for i in range(len(grid)):
-				record , temp = grid[i] , []
-
-				for c in range(len(record)):
-					temp.append(record[c]+' '*(maxColWidth[c]-len(record[c])))
-				rst.append(delimiter.join(temp))
-			rst='\n'.join(rst)
+			rst= '\n'.join([delimiter.join("{:<{width}}".format(col, width=maxColWidth[index]) for index, col in enumerate(row)) for row in grid])
 		return rst
 
 	def pivotGrid(self):
@@ -178,19 +171,19 @@ class datawizardkeepdelimitersCommand(sublime_plugin.TextCommand):
 class datawizardleadingzerosaddCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 
-		data=text.split('\n')
+		lines=text.split('\n')
 
 		def replace_str_index(text,index=0,replacement=''):
 			return '%s%s%s'%(text[:index],replacement,text[index+1:])
 
-		for i in range(0,len(data)):
-			for c in range(0,len(data[i])):
-				if data[i][c]==' ':
-					data[i]=replace_str_index(data[i],c,'0')
+		for y in range(0,len(lines)):
+			for x in range(0,len(lines[y])):
+				if lines[y][x]==' ':
+					lines[y]=replace_str_index(lines[y],x,'0')
 				else:
 					break
 
-		return '\n'.join(data)
+		return '\n'.join(lines)
 
 	def run(self, edit):
 		runEdit(self, edit)
@@ -206,10 +199,10 @@ class datawizardleadingzerosremoveCommand(sublime_plugin.TextCommand):
 		def replace_str_index(text,index=0,replacement=''):
 			return '%s%s%s'%(text[:index],replacement,text[index+1:])
 
-		for i in range(0,len(lines)):
-			for c in range(0,len(lines[i])):
-				if lines[i][c]=='0':
-					lines[i]=replace_str_index(lines[i],c,' ')
+		for y in range(0,len(lines)):
+			for x in range(0,len(lines[y])):
+				if lines[y][x]=='0':
+					lines[y]=replace_str_index(lines[y],x,' ')
 				else:
 					break
 
@@ -251,12 +244,7 @@ class datawizardsqltolowercaserCommand(sublime_plugin.TextCommand):
 
 class datawizardpyvartotextCommand(sublime_plugin.TextCommand):
 	def format(self,text):
-		lines=text.splitlines()
-
-		for i in range(0,len(lines)):
-			lines[i]=lines[i].replace('\\n','\n').replace('\\t','\t')
-
-		return '\n'.join(lines)
+		return text.replace('\\n','\n').replace('\\t','\t')
 
 	def run(self, edit):
 		runEdit(self, edit)
@@ -376,27 +364,26 @@ class datawizardconverttosqlinsertCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
 		headers=a.grid[0]
+		table=[["'"+f.replace("'","''")+"'" if f!='' else 'NULL' for f in row] for row in a.grid[1:] ]
+		table=[',('+','.join(row)+')\n' for row in table]
 
 		sql='--drop table if exists #TempTable\ngo\n\ncreate table #TempTable\n(\n\trow_id int identity(1,1),\n'
 
-		for index,columHeader in enumerate(headers):
-			sql+='\t'+'['+columHeader+']'+' nvarchar('+str(a.maxColWidth[index])+'),\n'
+		for i in range(len(headers)):
+			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(a.maxColWidth[i])+'),\n'
+		sql+='\n)\n'
+		insert='\n\ngo\n\ninsert into #TempTable ('+','.join(['['+i+']' for i in headers])+')\nvaluesx'
 
-		sql+=')\ngo\n\n'
+		if len(table)>1000:
+			tableInsertLocs=[1000*i-1 for i in range(1,int(len(table)/1000)+1)]
+			print(tableInsertLocs)
+			while tableInsertLocs:
+				loc=tableInsertLocs.pop()
+				table.insert(loc,insert)
+		table.insert(0,insert)
 
-		for index,row in enumerate(a.grid[1:]):
-
-			if index%1000==0:
-				sql+='\ninsert into #TempTable ('+','.join(['['+col+']' for col in headers])+')\nvalues '
-			else:
-				sql+=','
-
-			sql+='('+','.join(["'"+f.replace("'","''")+"'" if f!='' else 'NULL' for f in row])+')\n'
-
-		for index,row in enumerate(a.grid):
-			if len(a.grid[index])!=len(a.grid[0]):
-				sql+='\n{1} UNEQUAL NUMBER OF COLUMNS ON ORIGINAL DATASET LINE {0} PLEASE CORRECT AND RE-RUN {1}'.format(index+1,'*'*50)
-
+		sql+=''.join(table)
+		sql=sql.replace('valuesx,','values ')
 		return sql
 
 	def run(self, edit):
