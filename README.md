@@ -3,13 +3,34 @@ ST3/ST4 package for advanced data manipulation in delimited flat files (.csv, .p
 Notes: it's strongly recommended to key bind the justify, collapse, pivot, and pop commands.
 Recommended Key Bindings
 
-    [
-        { "keys": ["alt+\\"], "command": "datawizardjustifycolumns"},
-        { "keys": ["alt+shift+\\"], "command": "datawizardcollapsecolumns"},
-        { "keys": ["alt+shift+p"], "command": "datawizardpivotjustify"},
-        { "keys": ["alt+p"], "command": "datawizardpivot"},
-        { "keys": ["alt+o"], "command": "datawizardpop"}
-    ]
+	//recommended bindings
+	// { "keys": ["alt+\\"],           "command": "datawizardjustifycolumns"},
+	// { "keys": ["alt+shift+\\"],     "command": "datawizardcollapsecolumns"},
+	// { "keys": ["alt+p"],            "command": "datawizardpivot"},
+	// { "keys": ["alt+shift+p"],      "command": "datawizardpivotjustify"},
+	// { "keys": ["alt+l"],            "command": "datawizardpop"},
+	// { "keys": ["alt+s"],            "command": "datawizardstatisticssampledelimited"},
+	// { "keys": ["alt+shift+s"],      "command": "datawizardstatisticssampleformatsdelimited"},
+	// { "keys": ["alt+j"],            "command": "datawizardstatisticssamplejson"},
+	// { "keys": ["alt+shift+j"],      "command": "datawizardstatisticssampleformatjson"},
+	// { "keys": ["alt+i"],            "command": "datawizardstatisticssampledelimiteddiffs"},
+	// { "keys": ["alt+q"],            "command": "datawizardconverttosqlinsertpostgres"},
+
+
+	//not neccessary to map these but you can if wanted.
+	//sense these are less common i really just use the context menu for these actions by right clicking in the canvas
+
+	// {"keys":["alt+?"],"command":"datawizarddistinctchars"},
+	// {"keys":["alt+?"],"command":"datawizardkeepdelimiters"},
+	// {"keys":["alt+?"],"command":"datawizardleadingzerosadd"},
+	// {"keys":["alt+?"],"command":"datawizardleadingzerosremove"},
+	// {"keys":["alt+?"],"command":"datawizardsqltolowercaser"},
+	// {"keys":["alt+?"],"command":"datawizardpyvartotext"},
+	// {"keys":["alt+?"],"command":"datawizardrandomshufflecolumnvertically"},
+	// {"keys":["alt+?"],"command":"datawizardrandomshufflecharvertically"},
+	// {"keys":["alt+?"],"command":"datawizardconverttosqlinsert"},
+	// {"keys":["alt+?"],"command":"datawizardopenchrometab"},
+	// {"keys":["alt+?"],"command":"datawizardcrosstab"}
 
 
 Justify Columns (auto detects delimiters)
@@ -45,7 +66,7 @@ Sample JSON
 Distinct Characters
 ![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctChars.gif)
 
-SQL Inserts(batched in groups of 1000)
+SQL Inserts(batched in groups of 1000) now supporting sql server and postgres syntax
 ![PyVarToText](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SQLInserts.gif)
 
 Other misc function

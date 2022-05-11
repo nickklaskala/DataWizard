@@ -31,6 +31,10 @@
 					"command": "datawizardpop"
 					},
 					{
+					"caption": "Keep Delimiters",
+					"command": "datawizardkeepdelimiters"
+					},
+					{
 					"caption": "Leading Zeros Add",
 					"command": "datawizardleadingzerosadd"
 					},
@@ -39,17 +43,30 @@
 					"command": "datawizardleadingzerosremove"
 					},
 					{
-					"caption": "Keep Delimiters",
-					"command": "datawizardkeepdelimiters"
-					},
-					{
 					"caption": "Shuffle Char Vertical",
-					"command": "datawizardrandomshufflecharvertically"
+					"command": "datawizardshufflecharvertically"
 					},
 					{
 					"caption": "Shuffle Column Vertical",
-					"command": "datawizardrandomshufflecolumnvertically"
+					"command": "datawizardshufflecolumnvertically"
 					},
+
+						{
+							"caption": "SQL", 
+							"id": "SQL", 
+							"children":
+							[
+								{
+								"caption": "To SQL-Server Inserts",
+								"command": "datawizardconverttosqlinsertsqlserver"
+								},
+								{
+								"caption": "To PostgresSQL Inserts",
+								"command": "datawizardconverttosqlinsertpostgres"
+								}
+							]
+				
+						}
 				],
 			},
 
@@ -59,12 +76,20 @@
 				"children":
 				[
 					{
-					"caption": "Sample File",
-					"command": "datawizardstatisticssampledelimited"
+					"caption": "Distinct Columns to JSON",
+					"command": "datawizarddistinctcolumnstojson"
 					},
 					{
-					"caption": "Sample Json",
-					"command": "datawizardstatisticssamplejson"
+					"caption": "Distinct Columns",
+					"command": "datawizarddistinctcolumns"
+					},
+					{
+					"caption": "Distinct Column Formats",
+					"command": "datawizarddistinctcolumnformats"
+					},
+					{
+					"caption": "Distinct Column Formats to JSON",
+					"command": "datawizarddistinctcolumnformatstojson"
 					},
 					{
 					"caption": "Get Distinct Chars",
@@ -74,7 +99,7 @@
 			},
 
 			{ 
-				"caption": "Other Tools", 
+				"caption": "Misc Tools", 
 				"id": "Data Manipulation Tools", 
 				"children":
 				[
@@ -83,16 +108,12 @@
 					"command": "datawizardpyvartotext"
 					},
 					{
-					"caption": "Lower Case Sql",
-					"command": "datawizardsqltolowercaser"
+					"caption": "Lower Case Sql Keywords",
+					"command": "datawizardlowercasesqlkeywords"
 					},
 					{
-					"caption": "Delimited to SQL Inserts",
-					"command": "datawizardconverttosqlinsert"
-					},
-					{
-					"caption": "open line(s) to chrome tab(s)",
-					"command": "datawizardopenchrometab"
+					"caption": "open lines to chrome tabs",
+					"command": "datawizardopenlinestochrometabs"
 					},
 				]
 			},
@@ -100,3 +121,4 @@
 		]
 	}
 ]
+

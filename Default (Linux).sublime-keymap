@@ -1,0 +1,31 @@
+[
+	//recommended bindings
+	// { "keys": ["alt+\\"],           "command": "datawizardjustifycolumns"},
+	// { "keys": ["alt+shift+\\"],     "command": "datawizardcollapsecolumns"},
+	// { "keys": ["alt+p"],            "command": "datawizardpivot"},
+	// { "keys": ["alt+shift+p"],      "command": "datawizardpivotjustify"},
+	// { "keys": ["alt+l"],            "command": "datawizardpop"},
+	// { "keys": ["alt+s"],            "command": "datawizardstatisticssampledelimited"},
+	// { "keys": ["alt+shift+s"],      "command": "datawizardstatisticssampleformatsdelimited"},
+	// { "keys": ["alt+j"],            "command": "datawizardstatisticssamplejson"},
+	// { "keys": ["alt+shift+j"],      "command": "datawizardstatisticssampleformatjson"},
+	// { "keys": ["alt+i"],            "command": "datawizardstatisticssampledelimiteddiffs"},
+	// { "keys": ["alt+q"],            "command": "datawizardconverttosqlinsertpostgres"},
+
+
+	//not neccessary to map these but you can if wanted.
+	//sense these are less common i really just use the context menu for these actions by right clicking in the canvas
+
+	// {"keys":["alt+?"],"command":"datawizarddistinctchars"},
+	// {"keys":["alt+?"],"command":"datawizardkeepdelimiters"},
+	// {"keys":["alt+?"],"command":"datawizardleadingzerosadd"},
+	// {"keys":["alt+?"],"command":"datawizardleadingzerosremove"},
+	// {"keys":["alt+?"],"command":"datawizardsqltolowercaser"},
+	// {"keys":["alt+?"],"command":"datawizardpyvartotext"},
+	// {"keys":["alt+?"],"command":"datawizardrandomshufflecolumnvertically"},
+	// {"keys":["alt+?"],"command":"datawizardrandomshufflecharvertically"},
+	// {"keys":["alt+?"],"command":"datawizardconverttosqlinsert"},
+	// {"keys":["alt+?"],"command":"datawizardopenchrometab"},
+	// {"keys":["alt+?"],"command":"datawizardcrosstab"}
+
+]

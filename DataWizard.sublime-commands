@@ -1,70 +1,83 @@
 [
 	{
-	"caption": "DataWizard:Justify Columns",
+	"caption": "DataWizard : Columns Justify",
 	"command": "datawizardjustifycolumns"
 	},
 	{
-	"caption": "DataWizard:Collapse Columns",
+	"caption": "DataWizard : Columns Collapse",
 	"command": "datawizardcollapsecolumns"
 	},
 	{
-	"caption": "DataWizard:Data Pivot",
+	"caption": "DataWizard : Data Pivot",
 	"command": "datawizardpivot"
 	},
 	{
-	"caption": "DataWizard:Data Pivot and Justify",
+	"caption": "DataWizard : Data Pivot and Justify (file size sensitive)",
 	"command": "datawizardpivotjustify"
 	},
 	{
-	"caption": "DataWizard:Data Pop",
+	"caption": "DataWizard : Data Pop",
 	"command": "datawizardpop"
 	},
 	{
-	"caption": "DataWizard:Get Distinct Chars",
-	"command": "datawizarddistinctchars"
-	},
-	{
-	"caption": "DataWizard:Convert Py Var to Text",
-	"command": "datawizardpyvartotext"
-	},
-	{
-	"caption": "DataWizard:Keep Delimiters",
+	"caption": "DataWizard : Keep Delimiters",
 	"command": "datawizardkeepdelimiters"
 	},
 	{
-	"caption": "DataWizard:Add Leading Zeros",
+	"caption": "DataWizard : Leading Zeros Add",
 	"command": "datawizardleadingzerosadd"
 	},
 	{
-	"caption": "DataWizard:Remove Leading Zeros",
+	"caption": "DataWizard : Leading Zeros Remove",
 	"command": "datawizardleadingzerosremove"
 	},
 	{
-	"caption": "DataWizard:Lower Case Sql",
-	"command": "datawizardsqltolowercaser"
+	"caption": "DataWizard : Shuffle Char Vertical",
+	"command": "datawizardshufflecharvertically"
 	},
 	{
-	"caption": "DataWizard:Suffle Char Vertical",
-	"command": "datawizardrandomshufflecharvertically"
+	"caption": "DataWizard : Shuffle Column Vertical",
+	"command": "datawizardshufflecolumnvertically"
 	},
 	{
-	"caption": "DataWizard:Suffle Column Vertical",
-	"command": "datawizardrandomshufflecolumnvertically"
+	"caption": "DataWizard : To SQL-Server Inserts",
+	"command": "datawizardconverttosqlinsertsqlserver"
 	},
 	{
-	"caption": "DataWizard:Sample JSON",
-	"command": "datawizardstatisticssamplejson"
+	"caption": "DataWizard : To PostgresSQL Inserts",
+	"command": "datawizardconverttosqlinsertpostgres"
 	},
 	{
-	"caption": "DataWizard:Sample delimited",
-	"command": "datawizardstatisticssampledelimited"
+	"caption": "DataWizard : Distinct Columns to JSON",
+	"command": "datawizarddistinctcolumnstojson"
 	},
 	{
-	"caption": "DataWizard:Delimited to SQL Inserts",
-	"command": "datawizardconverttosqlinsert"
+	"caption": "DataWizard : Distinct Columns",
+	"command": "datawizarddistinctcolumns"
 	},
 	{
-	"caption": "open line(s) to chrome tab(s)",
-	"command": "datawizardopenchrometab"
+	"caption": "DataWizard : Distinct Column Formats",
+	"command": "datawizarddistinctcolumnformats"
 	},
+	{
+	"caption": "DataWizard : Distinct Column Formats to JSON",
+	"command": "datawizarddistinctcolumnformatstojson"
+	},
+	{
+	"caption": "DataWizard : Get Distinct Chars",
+	"command": "datawizarddistinctchars"
+	},
+	{
+	"caption": "DataWizard : Convert Py Var to Text",
+	"command": "datawizardpyvartotext"
+	},
+	{
+	"caption": "DataWizard : Lower Case Sql Keywords",
+	"command": "datawizardlowercasesqlkeywords"
+	},
+	{
+	"caption": "DataWizard : open lines to chrome tabs",
+	"command": "datawizardopenlinestochrometabs"
+	}
 ]
+
