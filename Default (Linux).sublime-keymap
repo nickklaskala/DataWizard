@@ -1,16 +1,19 @@
 [
 	//recommended bindings
+	//not enforeced as to not clash with any of your default key binds
+	//simply copy these over to use key binds
 	// { "keys": ["alt+\\"],           "command": "datawizardjustifycolumns"},
 	// { "keys": ["alt+shift+\\"],     "command": "datawizardcollapsecolumns"},
 	// { "keys": ["alt+p"],            "command": "datawizardpivot"},
 	// { "keys": ["alt+shift+p"],      "command": "datawizardpivotjustify"},
 	// { "keys": ["alt+l"],            "command": "datawizardpop"},
-	// { "keys": ["alt+s"],            "command": "datawizardstatisticssampledelimited"},
-	// { "keys": ["alt+shift+s"],      "command": "datawizardstatisticssampleformatsdelimited"},
-	// { "keys": ["alt+j"],            "command": "datawizardstatisticssamplejson"},
-	// { "keys": ["alt+shift+j"],      "command": "datawizardstatisticssampleformatjson"},
+	// { "keys": ["alt+s"],            "command": "datawizarddistinctcolumns"},
+	// { "keys": ["alt+shift+s"],      "command": "datawizarddistinctcolumnformats"},
+	// { "keys": ["alt+j"],            "command": "datawizarddistinctcolumnstojson"},
+	// { "keys": ["alt+shift+j"],      "command": "datawizarddistinctcolumnformatstojson"},
 	// { "keys": ["alt+i"],            "command": "datawizardstatisticssampledelimiteddiffs"},
 	// { "keys": ["alt+q"],            "command": "datawizardconverttosqlinsertpostgres"},
+	// { "keys": ["alt+q"],            "command": "datawizardconverttosqlinsertsqlserver"},
 
 
 	//not neccessary to map these but you can if wanted.

@@ -9,10 +9,10 @@ Recommended Key Bindings
 	// { "keys": ["alt+p"],            "command": "datawizardpivot"},
 	// { "keys": ["alt+shift+p"],      "command": "datawizardpivotjustify"},
 	// { "keys": ["alt+l"],            "command": "datawizardpop"},
-	// { "keys": ["alt+s"],            "command": "datawizardstatisticssampledelimited"},
-	// { "keys": ["alt+shift+s"],      "command": "datawizardstatisticssampleformatsdelimited"},
-	// { "keys": ["alt+j"],            "command": "datawizardstatisticssamplejson"},
-	// { "keys": ["alt+shift+j"],      "command": "datawizardstatisticssampleformatjson"},
+	// { "keys": ["alt+s"],            "command": "datawizarddistinctcolumns"},
+	// { "keys": ["alt+shift+s"],      "command": "datawizarddistinctcolumnformats"},
+	// { "keys": ["alt+j"],            "command": "datawizarddistinctcolumnstojson"},
+	// { "keys": ["alt+shift+j"],      "command": "datawizarddistinctcolumnformatstojson"},
 	// { "keys": ["alt+i"],            "command": "datawizardstatisticssampledelimiteddiffs"},
 	// { "keys": ["alt+q"],            "command": "datawizardconverttosqlinsertpostgres"},
 
@@ -30,7 +30,7 @@ Recommended Key Bindings
 	// {"keys":["alt+?"],"command":"datawizardrandomshufflecharvertically"},
 	// {"keys":["alt+?"],"command":"datawizardconverttosqlinsert"},
 	// {"keys":["alt+?"],"command":"datawizardopenchrometab"},
-	// {"keys":["alt+?"],"command":"datawizardcrosstab"}
+
 
 
 Justify Columns (auto detects delimiters)
@@ -48,6 +48,18 @@ Pivot and Justify
 Pop
 ![pop](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Pop.gif)
 
+Distinct Columns
+![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumns.gif)
+
+Distinct Column Formats
+![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnFormats.gif)
+
+Distinct Columns into Json
+![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnToJSON.gif)
+
+Distinct Column Formats into Json
+![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnFormatstoJSON.gif)
+
 LeadingZerosAddRemove
 ![LeadingZerosAddRemove](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/LeadingZerosAddRemove.gif)
 
@@ -56,12 +68,6 @@ Shuffle Columns
 
 Shuffle Characters vertically within equal length strings
 ![ShuffleCharsVertically](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/ShuffleCharsVertically.gif)
-
-Sample Delimited
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SampleDelimited.gif)
-
-Sample JSON
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Sample.gif)
 
 Distinct Characters
 ![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctChars.gif)
