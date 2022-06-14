@@ -30,6 +30,7 @@ Recommended Key Bindings
 	// {"keys":["alt+?"],"command":"datawizardrandomshufflecharvertically"},
 	// {"keys":["alt+?"],"command":"datawizardconverttosqlinsert"},
 	// {"keys":["alt+?"],"command":"datawizardopenchrometab"},
+	// {"keys":["alt+?"],"command":"datawizardformatjson"},
 
 
 

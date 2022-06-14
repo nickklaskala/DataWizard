@@ -115,6 +115,10 @@
 					"caption": "open lines to chrome tabs",
 					"command": "datawizardopenlinestochrometabs"
 					},
+					{
+					"caption": "Format JSON",
+					"command": "datawizardformatjson"
+					}
 				]
 			},
 

@@ -78,6 +78,10 @@
 	{
 	"caption": "DataWizard : open lines to chrome tabs",
 	"command": "datawizardopenlinestochrometabs"
+	},
+	{
+	"caption": "DataWizard : Format JSON",
+	"command": "datawizardformatjson"
 	}
 ]
 

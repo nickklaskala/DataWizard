@@ -57,12 +57,12 @@ class dataGrid:
 	def getDelimiter(self,text):
 		dct={'|':0}
 		for i in set(text.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}/\\'):
 				dct[i]=text.splitlines()[0].count(i)
 		return (max(dct,key=dct.get))
 
 	def getGrid(self,text,delimiter,quotechar):
-		grid=[[l.strip() if delimiter not in l.strip() else '"'+l.strip()+'"' for l in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
+		grid=[[col.strip().replace('"','""') if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
 		self.maxColWidth=self.getMaxColumnWidth(grid)
 		return grid
 
@@ -517,3 +517,15 @@ class datawizardcrosstabCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		runEdit(self, edit)
 
+
+
+class datawizardformatjsonCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		parsed = json.loads(text)
+		formatted =json.dumps(parsed, indent=4, sort_keys=True)
+		return formatted.replace('    ','\t')
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+ 
