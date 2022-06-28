@@ -1,3 +1,4 @@
+import re
 import sublime
 import sublime_plugin
 import csv
@@ -38,6 +39,57 @@ def runEdit(self, edit):
 		outData=self.format(inData)
 		self.view.replace(edit, region, outData)
 
+def splitSpecial(line,delimiter,quotechar):
+
+	maxPosition=len(line)-1
+	outList=[]
+	cell=''
+	qouted=False
+
+	def deqoute(cell,delimiter,qouted):
+		if len(cell)>0 and cell[0]=='"' and cell[-1]=='"' and delimiter not in cell:
+			cell=cell[1:-1]
+		return cell
+
+
+	for i,c in enumerate(line):
+		if c!=delimiter and c!=quotechar and i !=maxPosition:
+			cell+=c
+			continue
+		if i==maxPosition and c!=delimiter:
+			cell+=c
+			cell=deqoute(cell,delimiter,qouted)
+			outList.append(cell)
+			cell=''
+			continue
+		if i==maxPosition and c==delimiter:
+			cell=deqoute(cell,delimiter,qouted)
+			outList.append(cell)
+			cell=''
+			outList.append('')
+			continue
+		if c==quotechar and qouted==False and cell=='':
+			qouted=True
+			cell+=c
+			continue
+		if c==quotechar and i==maxPosition:
+			cell+=c
+			cell=deqoute(cell,delimiter,qouted)
+			outList.append(cell)
+			cell=''
+			break
+		if c==quotechar and qouted==True and i!=maxPosition and line[i+1]==delimiter:
+			cell+=c
+			qouted=False
+			continue
+		if c==delimiter and qouted==False:
+			cell=deqoute(cell,delimiter,qouted)
+			outList.append(cell)
+			cell=''
+			continue
+		cell+=c
+
+	return [cell.strip() for cell in outList]
 
 
 class dataGrid:
@@ -50,19 +102,19 @@ class dataGrid:
 	sampleMaxColWidth=[]
 
 	def __init__(self, text):
-		self.text       = text.strip('\n')
+		self.text       = re.sub("   +", " ", text.strip('\n'))
 		self.delimiter  = self.getDelimiter(self.text)
 		self.grid       = self.getGrid(self.text,self.delimiter,'"')
 
 	def getDelimiter(self,text):
 		dct={'|':0}
 		for i in set(text.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789_- "().[]{}/\\'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789:_- "().[]{}/\\'):
 				dct[i]=text.splitlines()[0].count(i)
 		return (max(dct,key=dct.get))
 
 	def getGrid(self,text,delimiter,quotechar):
-		grid=[[col.strip().replace('"','""') if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
+		grid=[splitSpecial(line,delimiter,quotechar) for line in text.splitlines()]
 		self.maxColWidth=self.getMaxColumnWidth(grid)
 		return grid
 
@@ -78,7 +130,7 @@ class dataGrid:
 	def getSampleGrid(self):
 		self.sampleGrid= [['' for x in y] for y in self.grid[1:]]
 		self.sampleGrid.insert(0,self.grid[0])
-		print(self.sampleGrid)
+		# print(self.sampleGrid)
 		for x in range(len(self.grid[0])):
 			col=[y[x] for y in self.grid[1:]]
 			col=sorted(list(set(col)))
@@ -91,7 +143,7 @@ class dataGrid:
 			rst='\n'.join([delimiter.join(i) for i in grid])
 		else:
 			rst= '\n'.join([delimiter.join("{:<{width}}".format(col, width=maxColWidth[index]) for index, col in enumerate(row)) for row in grid])
-			print(maxColWidth)
+			# print(maxColWidth)
 		return rst
 
 	def pivotGrid(self):
