@@ -34,32 +34,23 @@ Recommended Key Bindings
 
 
 
-Justify Columns (auto detects delimiters)
-![Justify](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Justify.gif)
-
-Collapse Columns
-![Collapse](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Collapse.gif)
-
-Pivot
-![Pivot](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Pivot.gif)
+Justify Collapse Columns (auto detects delimiters)
+![Justify_Collapse](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Justify_Collapse.gif)
 
 Pivot and Justify
-![PivotAndJustify](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/PivotAndJustify.gif)
+![Pivot_Justify](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Pivot_Justify.gif)
 
 Pop
 ![pop](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Pop.gif)
 
 Distinct Columns
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumns.gif)
-
-Distinct Column Formats
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnFormats.gif)
+![Distinct_Columns](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Distinct_Columns.gif)
 
 Distinct Columns into Json
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnToJSON.gif)
+![Distinct_Columns_JSON](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/Distinct_Columns_JSON.gif)
 
-Distinct Column Formats into Json
-![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctColumnFormatstoJSON.gif)
+SQL Inserts(batched in groups of 1000) now supporting sql server and postgres syntax
+![SQLInserts](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SQLInserts.gif)
 
 LeadingZerosAddRemove
 ![LeadingZerosAddRemove](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/LeadingZerosAddRemove.gif)
@@ -72,9 +63,6 @@ Shuffle Characters vertically within equal length strings
 
 Distinct Characters
 ![Sample](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/DistinctChars.gif)
-
-SQL Inserts(batched in groups of 1000) now supporting sql server and postgres syntax
-![PyVarToText](https://raw.githubusercontent.com/nickklaskala/DataWizard/main/Media/SQLInserts.gif)
 
 Other misc function
 Read Py Variables
