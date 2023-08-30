@@ -10,6 +10,16 @@ from random import shuffle
 from random import randrange
 from collections import OrderedDict
 import webbrowser
+from collections import OrderedDict
+from csv import DictReader
+
+
+def getDelimiter(text):
+	dct={'|':0}
+	for i in set(text.splitlines()[0]):
+		if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789=:_- "().[]{}/\\'):
+			dct[i]=text.splitlines()[0].count(i)
+	return (max(dct,key=dct.get))
 
 
 def maske(element):
@@ -28,6 +38,7 @@ def maske(element):
 				newElement+=char
 		return newElement
 
+
 def runEdit(self, edit):
 	text=''
 	for sel in self.view.sel():
@@ -38,6 +49,7 @@ def runEdit(self, edit):
 		inData=self.view.substr(region)
 		outData=self.format(inData)
 		self.view.replace(edit, region, outData)
+
 
 def splitSpecial(line,delimiter,quotechar):
 
@@ -102,20 +114,21 @@ class dataGrid:
 	sampleMaxColWidth=[]
 
 	def __init__(self, text):
-		self.text       = re.sub("   +", " ", text.strip('\n'))
+		self.text       = re.sub("   +", "", text.strip('\n'))
 		self.delimiter  = self.getDelimiter(self.text)
 		self.grid       = self.getGrid(self.text,self.delimiter,'"')
 
 	def getDelimiter(self,text):
 		dct={'|':0}
 		for i in set(text.splitlines()[0]):
-			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789:_- "().[]{}/\\'):
+			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789=:_- "().[]{}/\\'):
 				dct[i]=text.splitlines()[0].count(i)
 		return (max(dct,key=dct.get))
 
 	def getGrid(self,text,delimiter,quotechar):
-		grid=[splitSpecial(line,delimiter,quotechar) for line in text.splitlines()]
-		self.maxColWidth=self.getMaxColumnWidth(grid)
+		# grid=[[col.strip().replace('"','""') if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
+		grid=[[col.strip()  if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
+		# maxColWidth=self.getMaxColumnWidth(grid)################################
 		return grid
 
 	def getMaxColumnWidth(self,grid):
@@ -130,7 +143,7 @@ class dataGrid:
 	def getSampleGrid(self):
 		self.sampleGrid= [['' for x in y] for y in self.grid[1:]]
 		self.sampleGrid.insert(0,self.grid[0])
-		# print(self.sampleGrid)
+		print(self.sampleGrid)
 		for x in range(len(self.grid[0])):
 			col=[y[x] for y in self.grid[1:]]
 			col=sorted(list(set(col)))
@@ -142,23 +155,25 @@ class dataGrid:
 		if maxColWidth==None:
 			rst='\n'.join([delimiter.join(i) for i in grid])
 		else:
+			maxColWidth=self.getMaxColumnWidth(grid)
 			rst= '\n'.join([delimiter.join("{:<{width}}".format(col, width=maxColWidth[index]) for index, col in enumerate(row)) for row in grid])
-			# print(maxColWidth)
+			print(maxColWidth)
 		return rst
 
 	def pivotGrid(self):
 		self.grid=[list(x) for x in zip(*self.grid)]
+		# self.grid=list(map(list, itertools.zip_longest(*self.grid, fillvalue=None)))
 		self.maxColWidth=self.getMaxColumnWidth(self.grid)
 
-	def popGrid(self):
+	def popGrid(self,direction='left'):
 		for i in range(len(self.grid)):
-			temp=self.grid[i].pop(1)
-			self.grid[i].append(temp)
+			if direction=='left':
+				temp=self.grid[i].pop(1)
+				self.grid[i].append(temp)
+			else:
+				temp=self.grid[i].pop(-1)
+				self.grid[i].insert(1,temp)
 		self.maxColWidth=self.getMaxColumnWidth(self.grid)
-
-
-
-
 
 
 class datawizardjustifycolumnsCommand(sublime_plugin.TextCommand):
@@ -214,6 +229,17 @@ class datawizardpopCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
+class datawizardpoprightCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		a=dataGrid(text)
+		a.popGrid(direction='right')
+		rst=a.constructTextFromGrid(a.grid,a.delimiter,a.maxColWidth)
+		return rst
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
 class datawizarddistinctcharsCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		text='\n'.join(sorted(list(set(text))))
@@ -237,23 +263,15 @@ class datawizardleadingzerosaddCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 
 		lines=text.split('\n')
+		maxlen = max(map(len, lines))
+		new=[]
+		for line in lines:
+			new.append(line.zfill(maxlen))
 
-		def replace_str_index(text,index=0,replacement=''):
-			return '%s%s%s'%(text[:index],replacement,text[index+1:])
-
-		for y in range(0,len(lines)):
-			for x in range(0,len(lines[y])):
-				if lines[y][x]==' ':
-					lines[y]=replace_str_index(lines[y],x,'0')
-				else:
-					break
-
-		return '\n'.join(lines)
+		return '\n'.join(new)
 
 	def run(self, edit):
 		runEdit(self, edit)
-
-
 
 
 class datawizardleadingzerosremoveCommand(sublime_plugin.TextCommand):
@@ -275,9 +293,6 @@ class datawizardleadingzerosremoveCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
 		runEdit(self, edit)
-
-
-
 
 
 class datawizardlowercasesqlkeywordsCommand(sublime_plugin.TextCommand):
@@ -306,7 +321,6 @@ class datawizardlowercasesqlkeywordsCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
 		runEdit(self, edit)
-
 
 
 class datawizardpyvartotextCommand(sublime_plugin.TextCommand):
@@ -339,8 +353,6 @@ class datawizardshufflecolumnverticallyCommand(sublime_plugin.TextCommand):
 			self.view.erase(edit, selection)
 
 
-
-
 class datawizardshufflecharverticallyCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		temp=[self.view.substr(selection) for selection in self.view.sel()]
@@ -368,12 +380,6 @@ class datawizardshufflecharverticallyCommand(sublime_plugin.TextCommand):
 			self.view.erase(edit, selection)
 
 
-
-
-
-
-
-
 class datawizarddistinctcolumnstojsonCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
@@ -389,6 +395,7 @@ class datawizarddistinctcolumnstojsonCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
 		runEdit(self, edit)
+
 
 class datawizarddistinctcolumnformatstojsonCommand(sublime_plugin.TextCommand):
 	def format(self,text):
@@ -434,6 +441,88 @@ class datawizarddistinctcolumnformatsCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
+class datawizardstatisticsjsonCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		a=dataGrid(text)
+		a.pivotGrid()
+
+		def _numeric(input):
+			input=input.strip('"').strip('$').replace(',','')
+			try:
+				rst=int(input) 
+				return rst
+			except:
+				rst=float(input)
+				return rst
+
+		def _try(func ,input):
+			try:
+				rst=func(input)
+				return rst
+			except:
+				return False
+
+
+		def median(lst):
+			lst.sort()
+			mid = len(lst) // 2
+			res = (lst[mid] + lst[~mid]) / 2
+			return res
+		from functools import reduce
+		def mean(lst):
+			return reduce(lambda a, b: a + b, lst) / len(lst)
+
+		rst=OrderedDict()
+		for col in a.grid:
+			col_name=col.pop(0)
+			rst[col_name]=OrderedDict() 
+
+			tmp=[_numeric(n) for n in col if _try(_numeric,n)]
+			rst[col_name]['min']=min(tmp) if tmp else min(col)
+			rst[col_name]['max']=max(tmp) if tmp else max(col)
+			try: 
+				rst[col_name]['sum']=sum(tmp)
+			except:
+				pass
+			try:
+				rst[col_name]['mean']=mean(tmp)
+			except:
+				pass
+			try:
+				rst[col_name]['median']=median(tmp)
+			except:
+				pass
+
+			
+			try:
+				rst[col_name]['percent_blank']=col.count('')/len(col)
+			except:
+				pass
+			try:
+				rst[col_name]['percent_distinct']=len(set(col))/len(col)
+			except:
+				pass
+			try:
+				rst[col_name]['percent_dupe']=(len(col)-len(set(col)))/len(col)
+			except:
+				pass
+			col.sort()
+			distinct_col=set(col)
+			if len(distinct_col)<100:
+				counts=[(val,col.count(val)) for val in distinct_col]
+				temp=OrderedDict()
+				for i,item in enumerate(sorted(counts, key=lambda item: item[1],reverse=True)):
+					temp[item[0]]=item[1]
+				rst[col_name]['distribution_top_100']=temp
+			else:
+				rst[col_name]['distribution_top_100']=None
+
+
+		return json.dumps(rst, indent = 4,default='str')
+
+
+	def run(self, edit):
+		runEdit(self, edit)
 
 
 class datawizardstatisticssampledelimiteddiffsCommand(sublime_plugin.TextCommand):
@@ -455,7 +544,6 @@ class datawizardstatisticssampledelimiteddiffsCommand(sublime_plugin.TextCommand
 
 	def run(self, edit):
 		runEdit(self, edit)
-
 
 
 class datawizardconverttosqlinsertsqlserverCommand(sublime_plugin.TextCommand):
@@ -497,6 +585,7 @@ class datawizardconverttosqlinsertsqlserverCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
 		runEdit(self, edit)
+
 
 class datawizardconverttosqlinsertpostgresCommand(sublime_plugin.TextCommand):
 	def format(self,text):
@@ -550,10 +639,6 @@ class datawizardopenlinestochrometabsCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-
-
-
-
 class datawizardcrosstabCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		import pandas as pd #todo - currently not available
@@ -570,12 +655,67 @@ class datawizardcrosstabCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-
 class datawizardformatjsonCommand(sublime_plugin.TextCommand):
+	from collections import OrderedDict
 	def format(self,text):
-		parsed = json.loads(text)
-		formatted =json.dumps(parsed, indent=4, sort_keys=True)
+		parsed = json.loads(text,object_pairs_hook=OrderedDict)
+		formatted =json.dumps(parsed, indent=4, sort_keys=False)
 		return formatted.replace('    ','\t')
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
+class datawizardformatcsvtojsonCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		delimiter=getDelimiter(text)
+		text=[row for row in list(DictReader(text.splitlines(),delimiter=delimiter))]
+		formatted =json.dumps(text,default=str,indent=4)
+		return formatted.replace('    ','\t')
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
+class datawizardformatcsvtonestedjsonCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+
+		a=dataGrid(text)
+		grid=a.grid
+		nested_json = {}
+		for row in grid:
+			current_level = nested_json
+			for i, column in enumerate(row[:-2]):
+				if column not in current_level:
+					current_level[column] = {}
+				current_level = current_level[column]
+			if row[-2] not in current_level:
+				current_level[row[-2]] = []
+			if row[-1] not in current_level[row[-2]]:
+				current_level[row[-2]].append(row[-1])
+
+		return json.dumps(nested_json, indent=4)
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
+
+
+class datawizardjsontoictCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		json_data=json.loads(text)
+		return str(json_data)
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
+
+class datawizarddicttojsonCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		dict_data=eval(text)
+		return json.dumps(dict_data,default=str,indent=4)
 
 	def run(self, edit):
 		runEdit(self, edit)

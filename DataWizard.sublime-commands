@@ -48,6 +48,10 @@
 	"command": "datawizardconverttosqlinsertpostgres"
 	},
 	{
+	"caption": "DataWizard : Statistics",
+	"command": "datawizardstatisticsjson"
+	},
+	{
 	"caption": "DataWizard : Distinct Columns to JSON",
 	"command": "datawizarddistinctcolumnstojson"
 	},
@@ -82,6 +86,23 @@
 	{
 	"caption": "DataWizard : Format JSON",
 	"command": "datawizardformatjson"
+	},
+	{
+	"caption": "DataWizard : Format CSV to JSON",
+	"command": "datawizardformatcsvtojson"
+	},
+	{
+	"caption": "DataWizard : Format CSV to Nested JSON",
+	"command": "datawizardformatcsvtonestedjson"
+	},
+	{
+	"caption": "DataWizard : json to dict",
+	"command": "jsontodict"
+	},
+	{
+	"caption": "DataWizard : dict to json",
+	"command": "dicttojson"
 	}
+
 ]
 

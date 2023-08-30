@@ -1,128 +1,136 @@
 [
-	{ 
+	{
 		"caption": "Data Wizard", 
 		"id": "Data Wizard", 
-		"children":
-		[
-
-			{ 
+		"children": [
+			{
 				"caption": "Data Tools", 
 				"id": "Data Manipulation Tools", 
-				"children":
-				[
+				"children": [
 					{
-					"caption": "Columns Justify",
-					"command": "datawizardjustifycolumns"
-					},
+						"caption": "Columns Justify", 
+						"command": "datawizardjustifycolumns"
+					}, 
 					{
-					"caption": "Columns Collapse",
-					"command": "datawizardcollapsecolumns"
-					},
+						"caption": "Columns Collapse", 
+						"command": "datawizardcollapsecolumns"
+					}, 
 					{
-					"caption": "Data Pivot",
-					"command": "datawizardpivot"
-					},
+						"caption": "Data Pivot", 
+						"command": "datawizardpivot"
+					}, 
 					{
-					"caption": "Data Pivot and Justify (file size sensitive)",
-					"command": "datawizardpivotjustify"
-					},
+						"caption": "Data Pivot and Justify (file size sensitive)", 
+						"command": "datawizardpivotjustify"
+					}, 
 					{
-					"caption": "Data Pop",
-					"command": "datawizardpop"
-					},
+						"caption": "Data Pop", 
+						"command": "datawizardpop"
+					}, 
 					{
-					"caption": "Keep Delimiters",
-					"command": "datawizardkeepdelimiters"
-					},
+						"caption": "Keep Delimiters", 
+						"command": "datawizardkeepdelimiters"
+					}, 
 					{
-					"caption": "Leading Zeros Add",
-					"command": "datawizardleadingzerosadd"
-					},
+						"caption": "Leading Zeros Add", 
+						"command": "datawizardleadingzerosadd"
+					}, 
 					{
-					"caption": "Leading Zeros Remove",
-					"command": "datawizardleadingzerosremove"
-					},
+						"caption": "Leading Zeros Remove", 
+						"command": "datawizardleadingzerosremove"
+					}, 
 					{
-					"caption": "Shuffle Char Vertical",
-					"command": "datawizardshufflecharvertically"
-					},
+						"caption": "Shuffle Char Vertical", 
+						"command": "datawizardshufflecharvertically"
+					}, 
 					{
-					"caption": "Shuffle Column Vertical",
-					"command": "datawizardshufflecolumnvertically"
-					},
-
-						{
-							"caption": "SQL", 
-							"id": "SQL", 
-							"children":
-							[
-								{
-								"caption": "To SQL-Server Inserts",
+						"caption": "Shuffle Column Vertical", 
+						"command": "datawizardshufflecolumnvertically"
+					}, 
+					{
+						"caption": "SQL", 
+						"id": "SQL", 
+						"children": [
+							{
+								"caption": "To SQL-Server Inserts", 
 								"command": "datawizardconverttosqlinsertsqlserver"
-								},
-								{
-								"caption": "To PostgresSQL Inserts",
+							}, 
+							{
+								"caption": "To PostgresSQL Inserts", 
 								"command": "datawizardconverttosqlinsertpostgres"
-								}
-							]
-				
-						}
-				],
-			},
-
+							}
+						]
+					}
+				]
+			}, 
 			{
 				"caption": "Analyze", 
 				"id": "Analyze", 
-				"children":
-				[
+				"children": [
 					{
-					"caption": "Distinct Columns to JSON",
-					"command": "datawizarddistinctcolumnstojson"
-					},
+						"caption": "statistics", 
+						"command": "datawizardstatisticsjson"
+					}, 
 					{
-					"caption": "Distinct Columns",
-					"command": "datawizarddistinctcolumns"
-					},
+						"caption": "Distinct Columns to JSON", 
+						"command": "datawizarddistinctcolumnstojson"
+					}, 
 					{
-					"caption": "Distinct Column Formats",
-					"command": "datawizarddistinctcolumnformats"
-					},
+						"caption": "Distinct Columns", 
+						"command": "datawizarddistinctcolumns"
+					}, 
 					{
-					"caption": "Distinct Column Formats to JSON",
-					"command": "datawizarddistinctcolumnformatstojson"
-					},
+						"caption": "Distinct Column Formats", 
+						"command": "datawizarddistinctcolumnformats"
+					}, 
 					{
-					"caption": "Get Distinct Chars",
-					"command": "datawizarddistinctchars"
-					},
-				],
-			},
-
-			{ 
-				"caption": "Misc Tools", 
-				"id": "Data Manipulation Tools", 
-				"children":
-				[
+						"caption": "Distinct Column Formats to JSON", 
+						"command": "datawizarddistinctcolumnformatstojson"
+					}, 
 					{
-					"caption": "Convert Py Var to Text",
-					"command": "datawizardpyvartotext"
-					},
-					{
-					"caption": "Lower Case Sql Keywords",
-					"command": "datawizardlowercasesqlkeywords"
-					},
-					{
-					"caption": "open lines to chrome tabs",
-					"command": "datawizardopenlinestochrometabs"
-					},
-					{
-					"caption": "Format JSON",
-					"command": "datawizardformatjson"
+						"caption": "Get Distinct Chars", 
+						"command": "datawizarddistinctchars"
 					}
 				]
-			},
-
+			}, 
+			{
+				"caption": "Misc Tools", 
+				"id": "Data Manipulation Tools", 
+				"children": [
+					{
+						"caption": "Convert py variable to text", 
+						"command": "datawizardpyvartotext"
+					}, 
+					{
+						"caption": "Sql keywords to lower case ", 
+						"command": "datawizardlowercasesqlkeywords"
+					}, 
+					{
+						"caption": "Open lines to chrome tabs", 
+						"command": "datawizardopenlinestochrometabs"
+					}, 
+					{
+						"caption": "Format JSON", 
+						"command": "datawizardformatjson"
+					}, 
+					{
+						"caption": "Convert CSV to JSON", 
+						"command": "datawizardformatcsvtojson"
+					}, 
+					{
+						"caption": "Convert CSV to nested JSON", 
+						"command": "datawizardformatcsvtonestedjson"
+					}, 
+					{
+						"caption": "Convert Json to py-dict", 
+						"command": "jsontodict"
+					}, 
+					{
+						"caption": "Convert Dict to json", 
+						"command": "dicttojson"
+					}
+				]
+			}
 		]
 	}
 ]
-
