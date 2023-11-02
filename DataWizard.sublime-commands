@@ -80,6 +80,10 @@
 	"command": "datawizardlowercasesqlkeywords"
 	},
 	{
+	"caption": "DataWizard : Lower Case Sql Keywords",
+	"command": "datawizarduppercasesqlkeywords"
+	},
+	{
 	"caption": "DataWizard : open lines to chrome tabs",
 	"command": "datawizardopenlinestochrometabs"
 	},
@@ -96,13 +100,16 @@
 	"command": "datawizardformatcsvtonestedjson"
 	},
 	{
-	"caption": "DataWizard : json to dict",
-	"command": "jsontodict"
+	"caption": "DataWizard : Format json to dict",
+	"command": "datawizardjsontodict"
 	},
 	{
-	"caption": "DataWizard : dict to json",
-	"command": "dicttojson"
+	"caption": "DataWizard : Format dict to json",
+	"command": "datawizarddicttojson"
+	},
+	{
+	"caption": "DataWizard : Format json to csv",
+	"command": "datawizardjsontocsv"
 	}
-
 ]
 
