@@ -123,11 +123,15 @@
 					}, 
 					{
 						"caption": "Convert Json to py-dict", 
-						"command": "jsontodict"
+						"command": "datawizardjsontodict"
 					}, 
 					{
 						"caption": "Convert Dict to json", 
-						"command": "dicttojson"
+						"command": "datawizarddicttojson"
+					}, 
+					{
+						"caption": "Convert JSON to CSV", 
+						"command": "datawizardjsontocsv"
 					}
 				]
 			}
