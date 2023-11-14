@@ -27,17 +27,17 @@ def maske(element):
 	if isinstance(element,list):
 		return [maske(el) for el in element]
 	elif isinstance(element,str):
-		newElement=re.sub('[0-9]', '9',re.sub('[a-z]', 'a',re.sub('[A-Z]', 'A', element)))
-
-		# for char in element:
-			# if char in ('abcdefghijklmnopqrstuvwxqyz'):
-			# 	newElement+='a'
-			# elif char in ('ABCDEFGHIJKLMNOPQRSTUVWXQYZ'):
-			# 	newElement+='A'
-			# elif char in ('0123456789'):
-			# 	newElement+='9'
-			# else:
-			# 	newElement+=char
+		# newElement=re.sub('[0-9]', '9',re.sub('[a-z]', 'a',re.sub('[A-Z]', 'A', element)))
+		newElement=''
+		for char in element:
+			if char in ('abcdefghijklmnopqrstuvwxqyz'):
+				newElement+='a'
+			elif char in ('ABCDEFGHIJKLMNOPQRSTUVWXQYZ'):
+				newElement+='A'
+			elif char in ('0123456789'):
+				newElement+='9'
+			else:
+				newElement+=char
 		return newElement
 
 
@@ -119,6 +119,9 @@ class dataGrid:
 		self.text       = re.sub("   +", "", text.strip('\n'))
 		self.delimiter  = self.getDelimiter(self.text)
 		self.grid       = self.getGrid(self.text,self.delimiter,'"')
+		self.len        = len(self.grid)
+		self.headers    = self.grid[0]
+		self.body       = self.grid[1:]
 
 	def getDelimiter(self,text):
 		dct={'|':0}
@@ -131,26 +134,25 @@ class dataGrid:
 	def getGrid(self,text,delimiter,quotechar):
 		# grid=[[col.strip().replace('"','""') if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
 		grid=[[col.strip()  if delimiter not in col.strip() else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
+		# grid=[[col  if delimiter not in col else '"'+col.strip().replace('"','""')+'"' for col in row] for row in csv.reader(text.splitlines(), delimiter=delimiter, quotechar=quotechar)]
 		# maxColWidth=self.getMaxColumnWidth(grid)################################
 		return grid
 
 	def getMaxColumnWidth(self,grid):
 		maxColWidth=[]
-		for i in range(len(grid[0])):
-			try:
-				maxColWidth.append(max([len(r[i]) for r in grid]))
-			except:
-				maxColWidth.append(0)
+		temp=[list(x) for x in zip(*self.grid)]
+		for i in temp:
+			maxColWidth.append(max([len(r) for r in i]))
 		return maxColWidth
 
-	def getSampleGrid(self):
-		self.sampleGrid= [['' for x in y] for y in self.grid[1:]]
-		self.sampleGrid.insert(0,self.grid[0])
-		for x in range(len(self.grid[0])):
-			col=[y[x] for y in self.grid[1:]]
-			col=sorted(list(set(col)))
-			for i in range(0,len(col)):
-				self.sampleGrid[i+1][x]=col[i]
+	def getSampleGrid(self,masked=False):
+		data=[list(set(x)) for x in zip(*self.grid[1:])]
+		if masked==True:
+			data=maske(data)
+			data=[set(i) for i in data]
+		data=[[header]+sorted(data[i]) for i,header in enumerate(self.headers)]
+		data=list(map(list, itertools.zip_longest(*data, fillvalue='')))
+		self.sampleGrid=data
 		self.sampleMaxColWidth=self.getMaxColumnWidth(self.sampleGrid)
 
 	def constructTextFromGrid(self,grid,delimiter,maxColWidth=None):#list of list ie grid
@@ -163,7 +165,6 @@ class dataGrid:
 
 	def pivotGrid(self):
 		self.grid=[list(x) for x in zip(*self.grid)]
-		# self.grid=list(map(list, itertools.zip_longest(*self.grid, fillvalue=None)))
 		self.maxColWidth=self.getMaxColumnWidth(self.grid)
 
 	def popGrid(self,direction='left'):
@@ -459,10 +460,8 @@ class datawizarddistinctcolumnsCommand(sublime_plugin.TextCommand):
 
 class datawizarddistinctcolumnformatsCommand(sublime_plugin.TextCommand):
 	def format(self,text):
-		lines=text.splitlines()
-		first_line=lines.pop(0)
-		a=dataGrid(first_line+'\n'+maske('\n'.join(lines)))
-		a.getSampleGrid()
+		a=dataGrid(text)
+		a.getSampleGrid(masked=True)
 
 		rst=a.constructTextFromGrid(a.sampleGrid,a.delimiter,a.sampleMaxColWidth)
 		return rst
@@ -699,8 +698,31 @@ class datawizardformatjsonCommand(sublime_plugin.TextCommand):
 class datawizardformatcsvtojsonCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		delimiter=getDelimiter(text)
-		text=[row for row in list(DictReader(text.splitlines(),delimiter=delimiter))]
-		formatted =json.dumps(text,default=str,indent=4)
+		data=list(DictReader(text.splitlines(),delimiter=delimiter))
+
+		data2=[]
+		for key in data[0]:
+			new=[]
+			flag=True
+			for d in data:
+				if d[key]=='':
+					temp=None
+				else:
+					try:
+						temp=int(d[key])
+					except:
+						try:
+							temp=float(d[key])
+						except:
+							flag=False
+							break
+				new.append(temp)
+
+			if flag:
+				for i,v in enumerate(new):
+					data[i][key]=v
+
+		formatted =json.dumps(data,default=str,indent=4).replace('": ""',': null')
 		return formatted.replace('    ','\t')
 
 	def run(self, edit):
@@ -724,12 +746,10 @@ class datawizardformatcsvtonestedjsonCommand(sublime_plugin.TextCommand):
 			if row[-1] not in current_level[row[-2]]:
 				current_level[row[-2]].append(row[-1])
 
-		return json.dumps(nested_json, indent=4)
+		return json.dumps(nested_json, indent=4,sort_keys=True)
 
 	def run(self, edit):
 		runEdit(self, edit)
-
-
 
 
 class datawizardjsontodictCommand(sublime_plugin.TextCommand):
@@ -741,7 +761,6 @@ class datawizardjsontodictCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-
 class datawizarddicttojsonCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		dict_data=eval(text)
@@ -751,16 +770,16 @@ class datawizarddicttojsonCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-
-
 class datawizardjsontocsvCommand(sublime_plugin.TextCommand):
 	def format(self,text):
-
-		dict_list=[json.loads(line) for line in text.splitlines()]
+		try:
+			dict_list=json.loads(text)
+		except:
+			text=text.strip().strip('[').strip(']').strip()
+			dict_list=[json.loads(line.strip(',')) for line in text.splitlines()]
 		fieldnames = set()
 		for d in dict_list:
 			fieldnames.update(d.keys())
-		fieldnames = sorted(fieldnames)    # sort the fieldnames...
 
 		# produce the csv file 
 		mem_file = io.StringIO()
@@ -775,10 +794,12 @@ class datawizardjsontocsvCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		runEdit(self, edit)
 
+class datawizardcsvtotsvCommand(sublime_plugin.TextCommand):
+	def format(self,text):
 
+		a=dataGrid(text)
+		a.delimiter='|' if a.delimiter ==',' else ','
+		return a.constructTextFromGrid(a.grid,a.delimiter)
 
-
-
-
-
-
+	def run(self, edit):
+		runEdit(self, edit)
