@@ -722,7 +722,7 @@ class datawizardformatcsvtojsonCommand(sublime_plugin.TextCommand):
 				for i,v in enumerate(new):
 					data[i][key]=v
 
-		formatted =json.dumps(data,default=str,indent=4).replace('": ""',': null')
+		formatted =json.dumps(data,default=str,indent=4).replace('": ""','": null')
 		return formatted.replace('    ','\t')
 
 	def run(self, edit):
