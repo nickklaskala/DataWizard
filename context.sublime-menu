@@ -118,20 +118,24 @@
 						"command": "datawizardformatcsvtojson"
 					}, 
 					{
+						"caption": "Convert JSON to CSV", 
+						"command": "datawizardjsontocsv"
+					}, 
+					{
 						"caption": "Convert CSV to nested JSON", 
 						"command": "datawizardformatcsvtonestedjson"
 					}, 
 					{
-						"caption": "Convert Json to py-dict", 
+						"caption": "Convert JSON to py-dict", 
 						"command": "datawizardjsontodict"
 					}, 
 					{
-						"caption": "Convert Dict to json", 
+						"caption": "Convert py-dict to JSON", 
 						"command": "datawizarddicttojson"
 					}, 
 					{
-						"caption": "Convert JSON to CSV", 
-						"command": "datawizardjsontocsv"
+						"caption": "Convert CSV to TSV", 
+						"command": "datawizardcsvtotsv"
 					}
 				]
 			}
