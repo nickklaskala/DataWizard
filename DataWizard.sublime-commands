@@ -100,16 +100,20 @@
 	"command": "datawizardformatcsvtonestedjson"
 	},
 	{
-	"caption": "DataWizard : Format json to dict",
+	"caption": "DataWizard : Format JSON to py-dict",
 	"command": "datawizardjsontodict"
 	},
 	{
-	"caption": "DataWizard : Format dict to json",
+	"caption": "DataWizard : Format py-dict to JSON",
 	"command": "datawizarddicttojson"
 	},
 	{
-	"caption": "DataWizard : Format json to csv",
+	"caption": "DataWizard : Format JSON to CSV",
 	"command": "datawizardjsontocsv"
+	},
+	{
+	"caption": "DataWizard : Format CSV to TSV",
+	"command": "datawizardcsvtotsv"
 	}
 ]
 
