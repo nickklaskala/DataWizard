@@ -13,6 +13,7 @@ import webbrowser
 from collections import OrderedDict
 from csv import DictReader
 import io
+import itertools
 
 def getDelimiter(text):
 	dct={'|':0}
