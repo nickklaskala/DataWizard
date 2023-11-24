@@ -46,20 +46,6 @@
 					{
 						"caption": "Shuffle Column Vertical", 
 						"command": "datawizardshufflecolumnvertically"
-					}, 
-					{
-						"caption": "SQL", 
-						"id": "SQL", 
-						"children": [
-							{
-								"caption": "To SQL-Server Inserts", 
-								"command": "datawizardconverttosqlinsertsqlserver"
-							}, 
-							{
-								"caption": "To PostgresSQL Inserts", 
-								"command": "datawizardconverttosqlinsertpostgres"
-							}
-						]
 					}
 				]
 			}, 
@@ -68,16 +54,16 @@
 				"id": "Analyze", 
 				"children": [
 					{
-						"caption": "statistics", 
+						"caption": "Statistics", 
 						"command": "datawizardstatisticsjson"
-					}, 
-					{
-						"caption": "Distinct Columns to JSON", 
-						"command": "datawizarddistinctcolumnstojson"
 					}, 
 					{
 						"caption": "Distinct Columns", 
 						"command": "datawizarddistinctcolumns"
+					}, 
+					{
+						"caption": "Distinct Columns to JSON", 
+						"command": "datawizarddistinctcolumnstojson"
 					}, 
 					{
 						"caption": "Distinct Column Formats", 
@@ -94,32 +80,28 @@
 				]
 			}, 
 			{
-				"caption": "Misc Tools", 
+				"caption": "Conversion Tools", 
 				"id": "Data Manipulation Tools", 
 				"children": [
-					{
-						"caption": "Convert py variable to text", 
-						"command": "datawizardpyvartotext"
-					}, 
-					{
-						"caption": "Sql keywords to lower case ", 
-						"command": "datawizardlowercasesqlkeywords"
-					}, 
-					{
-						"caption": "Open lines to chrome tabs", 
-						"command": "datawizardopenlinestochrometabs"
-					}, 
 					{
 						"caption": "Format JSON", 
 						"command": "datawizardformatjson"
 					}, 
 					{
-						"caption": "Convert CSV to JSON", 
-						"command": "datawizardformatcsvtojson"
+						"caption": "Flatten JSON", 
+						"command": "datawizardflattenjson"
 					}, 
 					{
 						"caption": "Convert JSON to CSV", 
 						"command": "datawizardjsontocsv"
+					}, 
+					{
+						"caption": "Convert JSON to CSV Flattened", 
+						"command": "datawizardjsontocsvflattened"
+					}, 
+					{
+						"caption": "Convert CSV to JSON", 
+						"command": "datawizardformatcsvtojson"
 					}, 
 					{
 						"caption": "Convert CSV to nested JSON", 
@@ -136,6 +118,32 @@
 					{
 						"caption": "Convert CSV to TSV", 
 						"command": "datawizardcsvtotsv"
+					}, 
+					{
+						"caption": "Convert py variable to text", 
+						"command": "datawizardpyvartotext"
+					}, 
+					{
+						"caption": "Sql keywords to lower case ", 
+						"command": "datawizardlowercasesqlkeywords"
+					}, 
+					{
+						"caption": "Open lines to chrome tabs", 
+						"command": "datawizardopenlinestochrometabs"
+					}, 
+					{
+						"caption": "CSV To SQL Insert", 
+						"id": "SQL", 
+						"children": [
+							{
+								"caption": "SQL-Server Syntax", 
+								"command": "datawizardconverttosqlinsertsqlserver"
+							}, 
+							{
+								"caption": "PostgresSQL Syntax", 
+								"command": "datawizardconverttosqlinsertpostgres"
+							}
+						]
 					}
 				]
 			}
