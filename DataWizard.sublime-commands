@@ -112,8 +112,17 @@
 	"command": "datawizardjsontocsv"
 	},
 	{
+	"caption": "DataWizard : Format JSON to CSV Flattened",
+	"command": "datawizardjsontocsvflattened"
+	},
+	{
 	"caption": "DataWizard : Format CSV to TSV",
 	"command": "datawizardcsvtotsv"
+	},
+	{
+	"caption": "DataWizard : Flatten JSON",
+	"command": "datawizardflattenjson"
 	}
+
 ]
 
