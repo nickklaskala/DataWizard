@@ -10,10 +10,13 @@ from random import shuffle
 from random import randrange
 from collections import OrderedDict
 import webbrowser
-from collections import OrderedDict
 from csv import DictReader
 import io
 import itertools
+# import datetime
+import os
+# from dateutil.tz import tzutc
+import time
 
 def getDelimiter(text):
 	dct={'|':0}
@@ -44,6 +47,8 @@ def maske(element):
 		return newElement
 
 def runEdit(self, edit):
+	# st = time.time()
+
 	text=''
 	for sel in self.view.sel():
 		text=text+self.view.substr(sel)
@@ -53,6 +58,12 @@ def runEdit(self, edit):
 		inData=self.view.substr(region)
 		outData=self.format(inData)
 		self.view.replace(edit, region, outData)
+
+	# et = time.time()
+	# elapsed_time = et - st
+	# print('Execution time:', elapsed_time, 'seconds')
+
+
 
 def splitSpecial(line,delimiter,quotechar):
 
@@ -152,7 +163,11 @@ class dataGrid:
 		self.grid       = self.getGrid(self.text,self.delimiter,'"')
 		self.len        = len(self.grid)
 		self.headers    = self.grid[0]
-		self.body       = self.grid[1:]
+		# self.body       = self.grid[1:]
+
+		for i in range(len(self.grid)):
+			if len(self.grid[i])!=len(self.grid[0]):
+				print('\n\n{1} UNEQUAL NUMBER OF COLUMNS ON LINE {0} IN FILE  PLEASE CORRECT AND RE-RUN {1}\n'.format(i,'*'*50))
 
 	def getDelimiter(self,text):
 		dct={'|':0}
@@ -258,7 +273,7 @@ class datawizardpivotjustifyCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-class datawizardpopCommand(sublime_plugin.TextCommand):
+class datawizardpopleftCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
 		a.popGrid()
@@ -638,12 +653,15 @@ class datawizardconverttosqlinsertsqlserverCommand(sublime_plugin.TextCommand):
 		table=[[formatvalue(f) for f in row] for row in a.grid[1:] ]
 		table=[',('+','.join(row)+')\n' for row in table]
 
-		sql='--drop table if exists #TempTable\ngo\n\ncreate table #TempTable\n(\n\trow_id int identity(1,1),\n'
+		filename=self.view.file_name() or 'temptable'
+		table_name=os.path.basename(filename).replace('.csv','').replace('.txt','').replace('.CSV','').replace('.TXT','').replace('-','_').replace('/','_').replace('\\','_')
+
+		sql='--drop table if exists #{table_name}\ngo\n\ncreate table #{table_name}\n(\n\trow_id int identity(1,1),\n'.format(table_name=table_name)
 
 		for i in range(len(headers)):
 			sql+='\t'+'['+headers[i]+']'+' nvarchar('+str(a.maxColWidth[i])+'),\n'
 		sql+='\n)\n'
-		insert='\n\ngo\n\ninsert into #TempTable ('+','.join(['['+i+']' for i in headers])+')\nvaluesx'
+		insert='\n\ngo\n\ninsert into #{table_name} ('.format(table_name=table_name)+','.join(['['+i+']' for i in headers])+')\nvaluesx'
 
 		if len(table)>1000:
 			tableInsertLocs=[1000*i-1 for i in range(1,int(len(table)/1000)+1)]
@@ -659,6 +677,53 @@ class datawizardconverttosqlinsertsqlserverCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		runEdit(self, edit)
 
+
+class datawizardconverttosqlinsertoracleCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		a=dataGrid(text)
+		a.maxColWidth=a.getMaxColumnWidth(a.grid)
+		headers=a.grid[0]
+
+		def unqoute(value):
+			try:
+				if value[0]=='"' and value[-1]=='"' and a.delimiter in value:
+					return value[1:-1]
+				else:
+					return value
+			except:
+				return value
+
+		def formatvalue(value):
+			return "'"+unqoute(value).replace("'","''")+"'" if value!='' else 'NULL' 
+
+		table=[[formatvalue(val)+' as '+headers[i] for i,val in enumerate(row)] for row in a.grid[1:] ]
+		table=['\t select '+','.join(row)+' from dual' for row in table]
+
+		filename=self.view.file_name() or 'temptable'
+		table_name=os.path.basename(filename).replace('.csv','').replace('.txt','').replace('.CSV','').replace('.TXT','').replace('-','_').replace('/','_').replace('\\','_')
+
+		sql='--drop table {table_name};\n\ncreate global temporary table {table_name}\n(\n\t'.format(table_name=table_name)
+
+		for i in range(len(headers)):
+			sql+='\t,' if i !=0 else ' '
+			sql+=headers[i]+' varchar2('+str(a.maxColWidth[i])+')\n'
+		sql+=')on commit preserve rows;'
+
+
+		insert='\n\n\ninsert into {table_name} ('.format(table_name=table_name)+','.join([i for i in headers])+')\n with tempdata as (<table>\n)\nselect * from tempdata;\n'
+
+		chunks=[table[i:i + 1000] for i in range(0, len(table), 1000) ]
+		for chunk in chunks:
+			sql+=insert.replace('<table>','\n\tunion all '.join(chunk) )
+
+
+		return sql
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+
+ 
 
 class datawizardconverttosqlinsertpostgresCommand(sublime_plugin.TextCommand):
 	def format(self,text):
@@ -678,13 +743,17 @@ class datawizardconverttosqlinsertpostgresCommand(sublime_plugin.TextCommand):
 
 		table=[[formatvalue(f) for f in row] for row in a.grid[1:] ]
 		table=[',('+','.join(row)+')\n' for row in table]
+		filename=self.view.file_name() or 'temptable'
+		table_name=os.path.basename(filename).replace('.csv','').replace('.txt','').replace('.CSV','').replace('.TXT','').replace('-','_').replace('/','_').replace('\\','_')
 
-		sql='--drop table if exists TempTable;\n\ncreate temp table TempTable\n(\n\trow_id serial\n'
+		sql='--drop table if exists {table_name};\n\ncreate table {table_name}\n(\n'.format(table_name=table_name)
 
+		c={x:',' for x in range(1000)}
+		c[0]=' '
 		for i in range(len(headers)):
-			sql+='\t'+',"'+headers[i]+'"'+' text\n'
+			sql+='\t'+c[i]+'"'+headers[i]+'"'+' text\n'
 		sql+='\n);\n'
-		insert='\n\n\n\n;insert into TempTable ('+','.join(['"'+i+'"' for i in headers])+')\nvaluesx'
+		insert='\n\n\n\n;insert into {table_name} ('.format(table_name=table_name)+','.join(['"'+i+'"' for i in headers])+')\nvaluesx'
 
 		if len(table)>1000:
 			tableInsertLocs=[1000*i-1 for i in range(1,int(len(table)/1000)+1)]
@@ -766,8 +835,9 @@ class datawizardformatcsvtojsonCommand(sublime_plugin.TextCommand):
 				for i,v in enumerate(new):
 					data[i][key]=v
 
-		formatted =json.dumps(data,default=str,indent=4).replace('": ""','": null')
-		return formatted.replace('    ','\t')
+		formatted = json.dumps(data,default=str,indent=4).replace('": ""','": null')
+		formatted_special = formatted.replace('\n    {','<nl>   {').replace('    ','').replace('\n','').replace('<nl>   {','\n    {').replace('}]','}\n]')
+		return formatted_special
 
 	def run(self, edit):
 		runEdit(self, edit)
@@ -900,9 +970,10 @@ class datawizardjsontocsvflattenedCommand(sublime_plugin.TextCommand):
 
 class datawizardcsvtotsvCommand(sublime_plugin.TextCommand):
 	def format(self,text):
-
 		a=dataGrid(text)
-		a.delimiter='|' if a.delimiter ==',' else ','
+		delimiters=['|',',','\t']*2
+		current_delimiter_index=delimiters.index(a.delimiter)
+		a.delimiter=delimiters[current_delimiter_index+1]
 		a.formatGrid()
 		return a.constructTextFromGrid(a.grid,a.delimiter)
 
@@ -915,6 +986,15 @@ class datawizardflattenjsonCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		rst=flatten_json(text)
 		return rst
+
+	def run(self, edit):
+		runEdit(self, edit)
+
+class datawizardsortlinesbylengthCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		lines=[line.rstrip(' ') for line in text.splitlines()]
+		lines.sort(key=len, reverse=True)
+		return '\n'.join(lines)
 
 	def run(self, edit):
 		runEdit(self, edit)
