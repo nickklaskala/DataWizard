@@ -24,12 +24,12 @@
 						"command": "datawizardpivotjustify"
 					}, 
 					{
-						"caption": "Data Pop", 
-						"command": "datawizardpop"
+						"caption": "Data Pop right", 
+						"command": "datawizardpopright"
 					}, 
 					{
-						"caption": "Keep Delimiters", 
-						"command": "datawizardkeepdelimiters"
+						"caption": "Data Pop left", 
+						"command": "datawizardpopleft"
 					}, 
 					{
 						"caption": "Leading Zeros Add", 
@@ -46,6 +46,10 @@
 					{
 						"caption": "Shuffle Column Vertical", 
 						"command": "datawizardshufflecolumnvertically"
+					}, 
+					{
+						"caption": "Keep Delimiters", 
+						"command": "datawizardkeepdelimiters"
 					}
 				]
 			}, 
@@ -84,6 +88,24 @@
 				"id": "Data Manipulation Tools", 
 				"children": [
 					{
+						"caption": "CSV To SQL Insert", 
+						"id": "SQL", 
+						"children": [
+							{
+								"caption": "SQL-Server Syntax", 
+								"command": "datawizardconverttosqlinsertsqlserver"
+							}, 
+							{
+								"caption": "PostgresSQL Syntax", 
+								"command": "datawizardconverttosqlinsertpostgres"
+							}, 
+							{
+								"caption": "Oracle Syntax", 
+								"command": "datawizardconverttosqlinsertoracle"
+							}
+						]
+					}, 
+					{
 						"caption": "Format JSON", 
 						"command": "datawizardformatjson"
 					}, 
@@ -116,15 +138,15 @@
 						"command": "datawizarddicttojson"
 					}, 
 					{
-						"caption": "Convert CSV to TSV", 
-						"command": "datawizardcsvtotsv"
+						"caption": "Convert CSV to TSV to PSV", 
+						"command": "datawizardcsvtotsvtopsv"
 					}, 
 					{
 						"caption": "Convert py variable to text", 
 						"command": "datawizardpyvartotext"
 					}, 
 					{
-						"caption": "Sql keywords to lower case ", 
+						"caption": "Sql keywords to lower case", 
 						"command": "datawizardlowercasesqlkeywords"
 					}, 
 					{
@@ -132,21 +154,12 @@
 						"command": "datawizardopenlinestochrometabs"
 					}, 
 					{
-						"caption": "CSV To SQL Insert", 
-						"id": "SQL", 
-						"children": [
-							{
-								"caption": "SQL-Server Syntax", 
-								"command": "datawizardconverttosqlinsertsqlserver"
-							}, 
-							{
-								"caption": "PostgresSQL Syntax", 
-								"command": "datawizardconverttosqlinsertpostgres"
-							}
-						]
+						"caption": "Sort Lines By Length", 
+						"command": "datawizardsortlinesbylength"
 					}
 				]
 			}
 		]
 	}
 ]
+
