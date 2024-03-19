@@ -16,8 +16,12 @@
 	"command": "datawizardpivotjustify"
 	},
 	{
-	"caption": "DataWizard : Data Pop",
-	"command": "datawizardpop"
+	"caption": "DataWizard : Data Pop right",
+	"command": "datawizardpopright"
+	},
+	{
+	"caption": "DataWizard : Data Pop left",
+	"command": "datawizardpopleft"
 	},
 	{
 	"caption": "DataWizard : Keep Delimiters",
@@ -46,6 +50,10 @@
 	{
 	"caption": "DataWizard : To PostgresSQL Inserts",
 	"command": "datawizardconverttosqlinsertpostgres"
+	},
+	{
+	"caption": "DataWizard : To Oracle Inserts",
+	"command": "datawizardconverttosqlinsertoracle"
 	},
 	{
 	"caption": "DataWizard : Statistics",
@@ -116,12 +124,16 @@
 	"command": "datawizardjsontocsvflattened"
 	},
 	{
-	"caption": "DataWizard : Format CSV to TSV",
-	"command": "datawizardcsvtotsv"
+	"caption": "DataWizard : Format CSV to TSV tp PSV",
+	"command": "datawizardcsvtotsvtopsv"
 	},
 	{
 	"caption": "DataWizard : Flatten JSON",
 	"command": "datawizardflattenjson"
+	},
+	{
+	"caption": "DataWizard : Sort Lines By Length",
+	"command": "datawizardsortlinesbylength"
 	}
 
 ]
