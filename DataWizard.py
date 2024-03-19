@@ -968,7 +968,7 @@ class datawizardjsontocsvflattenedCommand(sublime_plugin.TextCommand):
 		runEdit(self, edit)
 
 
-class datawizardcsvtotsvCommand(sublime_plugin.TextCommand):
+class datawizardcsvtotsvtopsvCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
 		delimiters=['|',',','\t']*2
