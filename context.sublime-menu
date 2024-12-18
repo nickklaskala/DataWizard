@@ -102,7 +102,12 @@
 							{
 								"caption": "Oracle Syntax", 
 								"command": "datawizardconverttosqlinsertoracle"
+							},
+							{
+								"caption": "SQL Where Clause", 
+								"command": "datawizardsqlwhereclause"
 							}
+
 						]
 					}, 
 					{
