@@ -158,8 +158,8 @@ class dataGrid:
 	sampleMaxColWidth=[]
 
 	def __init__(self, text):
-		self.text       = re.sub("   +", "", text.strip('\n'))
-		self.delimiter  = self.getDelimiter(self.text)
+		self.delimiter  = self.getDelimiter(text)
+		self.text       = text if len(text.splitlines()[0].split(self.delimiter))==1 else re.sub("   +", "", text.strip('\n'))
 		self.grid       = self.getGrid(self.text,self.delimiter,'"')
 		self.len        = len(self.grid)
 		self.headers    = self.grid[0]
@@ -171,6 +171,7 @@ class dataGrid:
 
 	def getDelimiter(self,text):
 		dct={'|':0}
+		print(text.splitlines()[0])
 		for i in set(text.splitlines()[0]):
 			if i not in ('abcdefghijklmnopqrstuvwxqyzABCDEFGHIJKLMNOPQRSTUVWXQYZ0123456789\'=:_- "().[]{}/\\'):
 				dct[i]=text.splitlines()[0].count(i)
@@ -240,6 +241,20 @@ class datawizardjustifycolumnsCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		runEdit(self, edit)
 
+class datawizardsqlwhereclauseCommand(sublime_plugin.TextCommand):
+	def format(self,text):
+		a=dataGrid(text)
+		a.pivotGrid()
+		sqlcmd='where 1=1'
+		for r in a.grid:
+			col=r.pop(0)
+			r=list(set(r))
+			l=','.join("'"+v+"'" for v in r)
+			sqlcmd+='\nand '+col+' in ('+l+')'
+		return sqlcmd
+
+	def run(self, edit):
+		runEdit(self, edit)
 
 class datawizardcollapsecolumnsCommand(sublime_plugin.TextCommand):
 	def format(self,text):
@@ -729,7 +744,7 @@ class datawizardconverttosqlinsertpostgresCommand(sublime_plugin.TextCommand):
 	def format(self,text):
 		a=dataGrid(text)
 		
-		headers=a.grid[0]
+		headers=[i.lower() for i in a.grid[0]]
 		def unqoute(value):
 			try:
 				if value[0]=='"' and value[-1]=='"' and a.delimiter in value:
@@ -742,23 +757,26 @@ class datawizardconverttosqlinsertpostgresCommand(sublime_plugin.TextCommand):
 			return "'"+unqoute(value).replace("'","''")+"'" if value!='' else 'NULL' 
 
 		table=[[formatvalue(f) for f in row] for row in a.grid[1:] ]
-		table=[',('+','.join(row)+')\n' for row in table]
+		table=[',('+','.join(row)+')' for row in table]
 		filename=self.view.file_name() or 'temptable'
 		table_name=os.path.basename(filename).replace('.csv','').replace('.txt','').replace('.CSV','').replace('.TXT','').replace('-','_').replace('/','_').replace('\\','_')
 
 		sql='--drop table if exists {table_name};\n\ncreate table {table_name}\n(\n'.format(table_name=table_name)
 
-		c={x:',' for x in range(1000)}
+		c={x:',' for x in range(10000)}
 		c[0]=' '
 		for i in range(len(headers)):
 			sql+='\t'+c[i]+'"'+headers[i]+'"'+' text\n'
 		sql+='\n);\n'
-		insert='\n\n\n\n;insert into {table_name} ('.format(table_name=table_name)+','.join(['"'+i+'"' for i in headers])+')\nvaluesx'
+		insert='\n\n\n\ninsert into {table_name} ('.format(table_name=table_name)+','.join(['"'+i+'"' for i in headers])+')\nvaluesx'
 
-		if len(table)>1000:
-			tableInsertLocs=[1000*i-1 for i in range(1,int(len(table)/1000)+1)]
+
+
+		if len(table)>10000:
+			tableInsertLocs=[10000*i-1 for i in range(1,int(len(table)/10000)+1)]
 			while tableInsertLocs:
 				loc=tableInsertLocs.pop()
+				table.insert(loc-1,';')
 				table.insert(loc,insert)
 		table.insert(0,insert)
 
