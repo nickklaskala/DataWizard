@@ -134,7 +134,11 @@
 	{
 	"caption": "DataWizard : Sort Lines By Length",
 	"command": "datawizardsortlinesbylength"
+	},
+	{
+	"caption": "DataWizard : SQL Where Clause", 
+	"command": "datawizardsqlwhereclause"
 	}
-
 ]
+
 
